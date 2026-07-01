@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -23,11 +24,19 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${outfit.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-outfit">
-        <Navbar />
-        {children}
-        <Footer />
+      <body className="min-h-full flex flex-col font-outfit bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <Navbar />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ import AIAssistantSection from "@/components/AIAssistantSection";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-black">
+    <main className="flex min-h-screen flex-col bg-white dark:bg-black transition-colors duration-300">
       <SequenceScroll />
       
       <PreservationSection />

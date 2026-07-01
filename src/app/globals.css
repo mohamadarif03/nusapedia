@@ -1,17 +1,11 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background: #000000; /* Match sequence darkness */
-  --color-foreground: #ffffff;
   --color-amber-500: #f59e0b;
   --color-amber-600: #d97706;
   --color-gold: #fbbf24;
   --font-outfit: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
-}
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
 }
 
 /* Hide scrollbar for a cleaner experience if desired */
@@ -19,12 +13,18 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-background);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #cbd5e1; /* slate-300 */
   border-radius: 4px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+}
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }

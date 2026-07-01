@@ -46,7 +46,7 @@ export default function AIAssistantSection() {
   const currentChat = chats[currentIndex];
 
   return (
-    <section id="tanya-ai" className="relative z-20 bg-black text-white py-24 md:py-32 overflow-hidden border-t border-white/5">
+    <section id="tanya-ai" className="relative z-20 bg-white dark:bg-black text-black dark:text-white py-24 md:py-32 overflow-hidden border-t border-black/5 dark:border-white/5 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col-reverse lg:flex-row items-center gap-16 lg:gap-24">
         
         {/* Left Column (50%) - Chat Mockup Visual */}
@@ -54,15 +54,15 @@ export default function AIAssistantSection() {
           {/* Decorative glow behind mockup */}
           <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
           
-          <div className="relative w-full max-w-md bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl shadow-2xl">
+          <div className="relative w-full max-w-md bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl shadow-2xl transition-colors duration-300">
             {/* Header Mockup */}
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-white/10 bg-white/5">
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 transition-colors duration-300">
               <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 5.4 3.6 8 8 12 4.4-4 8-6.6 8-12a8 8 0 0 0-8-8Z"/><path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
               </div>
               <div>
-                <h4 className="font-medium text-sm text-white">AI Asisten Budaya</h4>
-                <p className="text-[10px] text-green-400">Online</p>
+                <h4 className="font-medium text-sm text-black dark:text-white transition-colors duration-300">AI Asisten Budaya</h4>
+                <p className="text-[10px] text-green-600 dark:text-green-400">Online</p>
               </div>
             </div>
 
@@ -75,7 +75,7 @@ export default function AIAssistantSection() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                   transition={{ duration: 0.3 }}
-                  className="self-end max-w-[85%] bg-white/10 border border-white/10 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-white/90 leading-relaxed shadow-lg"
+                  className="self-end max-w-[85%] bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-black/90 dark:text-white/90 leading-relaxed shadow-lg transition-colors duration-300"
                 >
                   {currentChat.question}
                 </motion.div>
@@ -93,7 +93,7 @@ export default function AIAssistantSection() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="self-start max-w-[85%] bg-black/40 border border-white/5 rounded-2xl rounded-tl-sm px-4 py-4 shadow-lg flex gap-1.5 items-center"
+                      className="self-start max-w-[85%] bg-white/80 dark:bg-black/40 border border-black/5 dark:border-white/5 rounded-2xl rounded-tl-sm px-4 py-4 shadow-lg flex gap-1.5 items-center transition-colors duration-300"
                     >
                       <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-1.5 h-1.5 bg-gold rounded-full" />
                       <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-1.5 h-1.5 bg-gold rounded-full" />
@@ -106,7 +106,7 @@ export default function AIAssistantSection() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, transition: { duration: 0.2 } }}
                       transition={{ duration: 0.3 }}
-                      className="self-start max-w-[85%] bg-black/40 border border-white/5 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-white/80 leading-relaxed shadow-lg"
+                      className="self-start max-w-[85%] bg-white/80 dark:bg-black/40 border border-black/5 dark:border-white/5 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-black/80 dark:text-white/80 leading-relaxed shadow-lg transition-colors duration-300"
                     >
                       {currentChat.answer}
                     </motion.div>
@@ -116,11 +116,11 @@ export default function AIAssistantSection() {
             </div>
 
             {/* Chat Input Mockup */}
-            <div className="px-6 py-4 border-t border-white/5 flex gap-3 items-center">
-              <div className="w-full bg-white/5 border border-white/10 rounded-full h-10 flex items-center px-4">
-                <span className="text-white/30 text-xs">Ketik pertanyaanmu di sini...</span>
+            <div className="px-6 py-4 border-t border-black/5 dark:border-white/5 flex gap-3 items-center transition-colors duration-300">
+              <div className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-full h-10 flex items-center px-4 transition-colors duration-300">
+                <span className="text-black/30 dark:text-white/30 text-xs transition-colors duration-300">Ketik pertanyaanmu di sini...</span>
               </div>
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50">
+              <div className="w-10 h-10 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center text-black/50 dark:text-white/50 transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
               </div>
             </div>
@@ -132,20 +132,20 @@ export default function AIAssistantSection() {
           <span className="text-gold tracking-[0.2em] uppercase text-xs mb-4 font-medium block">
             Asisten Budaya
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight transition-colors duration-300">
             Tanya Apa Saja Soal Budaya Nusantara
           </h2>
-          <p className="text-white/60 text-lg leading-relaxed mb-8 max-w-lg">
+          <p className="text-black/60 dark:text-white/60 text-lg leading-relaxed mb-8 max-w-lg transition-colors duration-300">
             Punya pertanyaan spesifik soal motif kain, sejarah alat musik, atau makna tradisi suatu daerah? Asisten AI kami siap membantu menjelaskan dengan mudah dan akurat.
           </p>
 
-          <div className="flex items-start gap-4 mb-10 p-4 rounded-xl bg-white/5 border border-white/10 max-w-lg">
+          <div className="flex items-start gap-4 mb-10 p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 max-w-lg transition-colors duration-300">
             <div className="flex-shrink-0 mt-0.5 text-gold">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
             </div>
             <div>
-              <h5 className="text-sm font-medium text-white mb-1">Analisis Visual AI</h5>
-              <p className="text-xs text-white/60 leading-relaxed">
+              <h5 className="text-sm font-medium text-black dark:text-white mb-1 transition-colors duration-300">Analisis Visual AI</h5>
+              <p className="text-xs text-black/60 dark:text-white/60 leading-relaxed transition-colors duration-300">
                 Kamu juga bisa mengunggah foto kain batik atau artefak kuno untuk dianalisis sejarah dan filosofinya!
               </p>
             </div>
@@ -153,7 +153,7 @@ export default function AIAssistantSection() {
           
           <Link 
             href="/tanya-ai" 
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md rounded-full text-white text-xs font-medium tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 border border-black/20 dark:border-white/20 backdrop-blur-md rounded-full text-black dark:text-white text-xs font-medium tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(0,0,0,0.05)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]"
           >
             Coba Sekarang
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
