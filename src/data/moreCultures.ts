@@ -11,7 +11,7 @@ export const moreCultures: Culture[] = [
   },
   {
     id: "ex_ace2", slug: "rencong", name: "Rencong", category: "Kerajinan", province: "Aceh",
-    image: "https://images.unsplash.com/photo-1616781442111-e63df9442008?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/rencongaceh.jpeg", thumbnails: [],
     description: "Senjata tradisional Aceh berbentuk huruf L, simbol keberanian rakyat Aceh.",
     history: "Rencong telah digunakan sejak zaman Kesultanan Aceh Darussalam sebagai senjata perang dan simbol kehormatan.",
     philosophy: "Bentuknya yang menyerupai huruf Bismillah dalam aksara Arab melambangkan semangat jihad dan keberanian rakyat Aceh."
@@ -20,21 +20,21 @@ export const moreCultures: Culture[] = [
   // ============ SUMATERA UTARA ============
   {
     id: "su1", slug: "kain-ulos", name: "Kain Ulos", category: "Kerajinan", province: "Sumatera Utara",
-    image: "https://images.unsplash.com/photo-1620023472097-90c741e9cc9e?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Batak_Ulos_fabric_displayed_studio_202607021643.jpeg", thumbnails: [],
     description: "Kain tenun khas suku Batak yang memiliki peran penting dalam berbagai upacara adat.",
     history: "Secara harfiah Ulos berarti selimut yang menghangatkan badan.",
     philosophy: "Melambangkan ikatan kasih sayang, restu, dan perlindungan dari marabahaya."
   },
   {
     id: "su2", slug: "tari-tor-tor", name: "Tari Tor-Tor", category: "Seni Pertunjukan", province: "Sumatera Utara",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Tor_Tor_dancers_performing_Batak…_202607021644.jpeg", thumbnails: [],
     description: "Tarian purba suku Batak Toba yang diiringi oleh alat musik gondang.",
     history: "Digunakan sejak ratusan tahun lalu dalam ritual penyembuhan, panen, hingga kematian.",
     philosophy: "Bukan sekadar tarian, Tor-tor adalah medium komunikasi dengan roh leluhur dan Tuhan (Mula Jadi Na Bolon)."
   },
   {
     id: "ex_su3", slug: "bika-ambon", name: "Bika Ambon", category: "Kuliner", province: "Sumatera Utara",
-    image: "https://images.unsplash.com/photo-1604052328246-88062828b12f?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Bika_Ambon_cake_on_plate_202607021646.jpeg", thumbnails: [],
     description: "Kue khas Medan bertekstur berpori dengan aroma daun pandan dan santan.",
     history: "Meski namanya mengandung 'Ambon', kue ini justru berasal dari Medan dan merupakan warisan kuliner peranakan.",
     philosophy: "Tekstur berporinya yang unik mencerminkan kreativitas dan keberagaman budaya Kota Medan."
@@ -43,14 +43,14 @@ export const moreCultures: Culture[] = [
   // ============ SUMATERA BARAT ============
   {
     id: "ex_smb1", slug: "tari-piring", name: "Tari Piring", category: "Seni Pertunjukan", province: "Sumatera Barat",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancer_performing_Tari_Piring_co…_202607021648.jpeg", thumbnails: [],
     description: "Tarian dengan piring di telapak tangan yang digerakkan cepat tanpa jatuh.",
     history: "Berasal dari tradisi persembahan kepada dewa-dewa sebagai rasa syukur atas panen yang melimpah di Minangkabau.",
     philosophy: "Gerakan cepat tanpa menjatuhkan piring melambangkan ketangkasan, keseimbangan, dan ketelitian masyarakat Minang."
   },
   {
     id: "ex_smb2", slug: "rumah-gadang", name: "Rumah Gadang", category: "Lainnya", province: "Sumatera Barat",
-    image: "https://images.unsplash.com/photo-1531637777712-4eb63c462e92?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Minangkabau_house_model_displayed_202607021648.jpeg", thumbnails: [],
     description: "Rumah adat Minangkabau beratap gonjong yang menjulang tajam.",
     history: "Rumah Gadang telah menjadi pusat kehidupan masyarakat Minangkabau selama ratusan tahun, dihuni berdasarkan garis keturunan ibu (matrilineal).",
     philosophy: "Atap gonjong yang runcing melambangkan tanduk kerbau, mengenang kemenangan kerbau Minangkabau dalam legenda."
@@ -59,14 +59,14 @@ export const moreCultures: Culture[] = [
   // ============ RIAU ============
   {
     id: "ex_ri1", slug: "tari-zapin-melayu", name: "Tari Zapin Melayu", category: "Seni Pertunjukan", province: "Riau",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancers_performing_Tari_Zapin_Me…_202607021648.jpeg", thumbnails: [],
     description: "Tarian rumpun Melayu yang dipengaruhi budaya Arab.",
     history: "Tari Zapin dibawa oleh pedagang Arab dari Hadramaut ke pesisir Riau dan berkembang menjadi tarian khas Melayu.",
     philosophy: "Gerakan yang sopan dan teratur mencerminkan ajaran Islam tentang adab dan ketertiban dalam kehidupan bermasyarakat."
   },
   {
     id: "ex_ri2", slug: "tenun-siak", name: "Tenun Siak", category: "Kerajinan", province: "Riau",
-    image: "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Tenun_Siak_fabric_displayed_eleg…_202607021648.jpeg", thumbnails: [],
     description: "Kain tenun songket khas Melayu Siak dengan benang emas.",
     history: "Tenun Siak berkembang pesat pada masa kejayaan Kerajaan Siak Sri Indrapura sebagai kain kebesaran kerajaan.",
     philosophy: "Benang emas yang berkilau melambangkan kemakmuran dan keagungan peradaban Melayu Riau."
@@ -75,21 +75,21 @@ export const moreCultures: Culture[] = [
   // ============ KEPULAUAN RIAU ============
   {
     id: "kr1", slug: "tari-zapin", name: "Tari Zapin", category: "Seni Pertunjukan", province: "Kepulauan Riau",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancer_performing_Tari_Zapin_Melayu_202607021658.jpeg", thumbnails: [],
     description: "Tarian rumpun Melayu yang banyak dipengaruhi oleh budaya Arab dan Islam.",
     history: "Kata Zapin berasal dari bahasa Arab 'Zafn' yang berarti pergerakan kaki cepat. Dibawa oleh pedagang Arab dari Yaman.",
     philosophy: "Media dakwah Islam yang mengajarkan adab, kesopanan, dan harmoni komunal."
   },
   {
     id: "ex_kr2", slug: "gonggong", name: "Gonggong", category: "Kuliner", province: "Kepulauan Riau",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Gonggong_sea_snails_on_plate_202607021659.jpeg", thumbnails: [],
     description: "Seafood siput laut khas Tanjung Pinang yang direbus dan disajikan dengan sambal.",
     history: "Gonggong telah menjadi kuliner identitas masyarakat pesisir Kepulauan Riau sejak nenek moyang tinggal di pulau-pulau kecil.",
     philosophy: "Mencerminkan ketergantungan dan rasa syukur masyarakat kepulauan terhadap kekayaan laut sebagai sumber kehidupan."
   },
   {
     id: "ex_kr3", slug: "pantun-melayu-kepri", name: "Pantun Melayu Kepri", category: "Seni Pertunjukan", province: "Kepulauan Riau",
-    image: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Hand-written_Pantun_Melayu_scroll_202607021658.jpeg", thumbnails: [],
     description: "Tradisi berpantun yang menjadi identitas budaya Melayu kepulauan.",
     history: "Pantun telah menjadi tradisi lisan masyarakat Melayu Kepulauan Riau dalam setiap acara adat, peminangan, dan pergaulan.",
     philosophy: "Pantun mengajarkan bahwa setiap ucapan harus disampaikan dengan sopan, penuh kiasan, dan makna mendalam."
@@ -98,21 +98,21 @@ export const moreCultures: Culture[] = [
   // ============ JAMBI ============
   {
     id: "ja1", slug: "candi-muaro-jambi", name: "Kompleks Muaro Jambi", category: "Lainnya", province: "Jambi",
-    image: "https://images.unsplash.com/photo-1531637777712-4eb63c462e92?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Temple_complex_model_on_stand_202607021658.jpeg", thumbnails: [],
     description: "Situs purbakala kompleks candi Hindu-Buddha terluas di Asia Tenggara.",
     history: "Pusat pendidikan agama Buddha di masa Kerajaan Sriwijaya dan Melayu dari abad ke-7 hingga 13.",
     philosophy: "Bukti sejarah kejayaan intelektual dan harmoni agama di masa lampau Nusantara."
   },
   {
     id: "ex_ja2", slug: "batik-jambi", name: "Batik Jambi", category: "Batik", province: "Jambi",
-    image: "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Batik_Jambi_fabric_on_stand_202607021701.jpeg", thumbnails: [],
     description: "Batik khas Jambi dengan motif-motif flora dan fauna lokal seperti durian pecah.",
     history: "Batik Jambi telah ada sejak zaman Kerajaan Melayu Jambi dan dipengaruhi oleh kebudayaan Sriwijaya.",
     philosophy: "Motif durian pecah melambangkan keterbukaan dan kerendahan hati masyarakat Jambi."
   },
   {
     id: "ex_ja3", slug: "tempoyak", name: "Tempoyak", category: "Kuliner", province: "Jambi",
-    image: "https://images.unsplash.com/photo-1594212724424-9b0d62a220dc?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Tempoyak_in_ceramic_bowl_202607021701.jpeg", thumbnails: [],
     description: "Fermentasi daging durian yang digunakan sebagai bumbu masakan khas Jambi.",
     history: "Tempoyak merupakan kearifan lokal masyarakat Jambi dalam mengawetkan durian yang melimpah saat musim panen.",
     philosophy: "Mencerminkan kreativitas dan kesederhanaan masyarakat dalam memanfaatkan hasil alam secara bijaksana."
@@ -121,21 +121,21 @@ export const moreCultures: Culture[] = [
   // ============ SUMATERA SELATAN ============
   {
     id: "ss1", slug: "pempek", name: "Pempek", category: "Kuliner", province: "Sumatera Selatan",
-    image: "https://images.unsplash.com/photo-1604052328246-88062828b12f?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Pempek_Palembang_on_white_plate_202607021701.jpeg", thumbnails: [],
     description: "Makanan berbahan dasar daging ikan dan sagu yang disajikan dengan kuah cuko yang khas.",
     history: "Sudah ada sejak abad ke-16 saat perantau Tionghoa menetap di Palembang dan mengolah hasil tangkapan ikan yang melimpah.",
     philosophy: "Mencerminkan akulturasi budaya lokal Palembang dengan budaya Tionghoa."
   },
   {
     id: "ss2", slug: "songket-palembang", name: "Songket Palembang", category: "Kerajinan", province: "Sumatera Selatan",
-    image: "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Songket_fabric_on_hanger_202607021701.jpeg", thumbnails: [],
     description: "Kain tenun mewah berbenang emas atau perak peninggalan kejayaan Sriwijaya.",
     history: "Dulunya hanya dipakai oleh keluarga kerajaan Sriwijaya dan Kesultanan Palembang Darussalam.",
     philosophy: "Kejayaan, kemakmuran, dan keagungan si pemakai."
   },
   {
     id: "ex_ss3", slug: "tari-tanggai", name: "Tari Tanggai", category: "Seni Pertunjukan", province: "Sumatera Selatan",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancer_performing_Tari_Tanggai_c…_202607021706.jpeg", thumbnails: [],
     description: "Tarian penyambutan tamu terhormat khas Palembang.",
     history: "Tari Tanggai telah menjadi tradisi penyambutan di Kesultanan Palembang Darussalam sejak berabad-abad lalu.",
     philosophy: "Gerakan tangan yang anggun dengan hiasan kuku panjang melambangkan penghormatan dan keramahan masyarakat Palembang."
@@ -144,21 +144,23 @@ export const moreCultures: Culture[] = [
   // ============ KEPULAUAN BANGKA BELITUNG ============
   {
     id: "bb1", slug: "mie-belitung", name: "Mie Belitung", category: "Kuliner", province: "Kepulauan Bangka Belitung",
-    image: "https://images.unsplash.com/photo-1594212724424-9b0d62a220dc?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Mie_Belitung_noodle_dish_202607021706.jpeg", thumbnails: [],
     description: "Mie kuning dengan siraman kuah kaldu udang yang kental dan manis gurih.",
     history: "Pengaruh kuat dari imigran Tionghoa berpadu dengan kekayaan hasil laut (udang) Melayu Belitung.",
     philosophy: "Simbol kebersamaan (mie yang panjang melambangkan umur/hubungan yang tak terputus) antar-etnis."
   },
   {
     id: "ex_bb2", slug: "lempah-kuning", name: "Lempah Kuning", category: "Kuliner", province: "Kepulauan Bangka Belitung",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Lempah_Kuning_fish_soup_202607021706.jpeg", thumbnails: [],
     description: "Sup ikan dengan kunyit khas Bangka yang segar dan gurih.",
     history: "Lempah Kuning merupakan masakan sehari-hari masyarakat Bangka yang memanfaatkan ikan segar hasil tangkapan nelayan.",
     philosophy: "Warna kuning melambangkan kemakmuran dan kesejahteraan masyarakat pesisir Bangka."
   },
   {
     id: "ex_bb3", slug: "campak", name: "Campak", category: "Seni Pertunjukan", province: "Kepulauan Bangka Belitung",
-    image: "https://images.unsplash.com/photo-1583091942171-897b7b13735a?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancers_performing_Tari_Campak_202607021706.jpeg", thumbnails: [
+      "/culture/Dancers_performing_Tari_Campak_202607021709.jpeg"
+    ],
     description: "Tarian tradisional Melayu Belitung untuk perayaan panen dan perkawinan.",
     history: "Campak telah ditarikan oleh masyarakat Belitung sejak ratusan tahun lalu sebagai ungkapan kegembiraan komunal.",
     philosophy: "Gerakan berpasangan mencerminkan keharmonisan dan kebersamaan dalam adat Melayu Belitung."
@@ -167,21 +169,21 @@ export const moreCultures: Culture[] = [
   // ============ BENGKULU ============
   {
     id: "be1", slug: "tabot", name: "Upacara Tabot", category: "Seni Pertunjukan", province: "Bengkulu",
-    image: "https://images.unsplash.com/photo-1583091942171-897b7b13735a?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Tabot_structure_model_display_202607021709.jpeg", thumbnails: [],
     description: "Upacara tradisional merayakan peringatan gugurnya Husein bin Ali (Cucu Nabi Muhammad).",
     history: "Dibawa oleh para pekerja Islam Syiah dari Madras, India yang membangun Benteng Marlborough pada 1714.",
     philosophy: "Simbol kepahlawanan, keberanian melawan kezaliman, dan penghormatan kepada leluhur."
   },
   {
     id: "ex_be2", slug: "kain-besurek", name: "Kain Besurek", category: "Kerajinan", province: "Bengkulu",
-    image: "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Kain_Besurek_fabric_on_stand_202607021709.jpeg", thumbnails: [],
     description: "Kain batik khas Bengkulu bermotif kaligrafi Arab.",
     history: "Kain Besurek diperkirakan berasal dari abad ke-17 saat pengaruh Islam masuk ke Bengkulu melalui perdagangan.",
     philosophy: "Motif kaligrafi Arab pada kain melambangkan ketaatan kepada ajaran Islam dan keindahan seni tulis Arab."
   },
   {
     id: "ex_be3", slug: "pendap", name: "Pendap", category: "Kuliner", province: "Bengkulu",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Pendap_fish_dish_taro_leaves_202607021709.jpeg", thumbnails: [],
     description: "Masakan khas Bengkulu dari ikan atau daging yang dibungkus daun talas lalu dikukus.",
     history: "Pendap merupakan hidangan tradisional yang telah diwariskan secara turun-temurun oleh masyarakat Bengkulu.",
     philosophy: "Cara memasak dengan membungkus daun mencerminkan kearifan lokal dalam menjaga cita rasa alami bahan makanan."
@@ -190,14 +192,14 @@ export const moreCultures: Culture[] = [
   // ============ LAMPUNG ============
   {
     id: "la1", slug: "kain-tapis", name: "Kain Tapis", category: "Kerajinan", province: "Lampung",
-    image: "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Kain_Tapis_on_wooden_stand_202607021727.jpeg", thumbnails: [],
     description: "Kain tenun tradisional masyarakat Lampung bersulam benang emas yang disulam dengan teknik cucuk.",
     history: "Pembuatan tapis ditujukan untuk menyelaraskan kehidupan dengan Sang Pencipta semesta.",
     philosophy: "Kesucian, kemewahan, dan lambang keagungan status sosial dalam adat Pepadun maupun Saibatin."
   },
   {
     id: "ex_la2", slug: "seruit", name: "Seruit", category: "Kuliner", province: "Lampung",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Seruit_fish_dish_presentation_202607021727.jpeg", thumbnails: [],
     description: "Ikan bakar dengan sambal terasi dan tempoyak khas Lampung.",
     history: "Seruit merupakan hidangan khas yang selalu hadir dalam acara adat dan perayaan masyarakat Lampung.",
     philosophy: "Perpaduan ikan bakar dan tempoyak mencerminkan harmoni antara hasil laut dan hasil bumi masyarakat Lampung."

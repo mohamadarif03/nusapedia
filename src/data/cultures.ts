@@ -101,9 +101,9 @@ export const cultures: Culture[] = [
     name: "Keris Nusantara",
     category: "Kerajinan",
     province: "Jawa Tengah",
-    image: "https://images.unsplash.com/photo-1616781442111-e63df9442008?q=80&w=800&auto=format&fit=crop",
+    image: "/culture/kerisnusantara.jpeg",
     thumbnails: [
-      "https://images.unsplash.com/photo-1616781442111-e63df9442008?q=80&w=800&auto=format&fit=crop",
+      "/culture/kerisnusantara.jpeg",
     ],
     description: "Keris adalah senjata tikam golongan belati (berujung runcing dan tajam pada kedua sisinya) yang asalnya dari Jawa.",
     history: "Telah digunakan sejak abad ke-9 dan menyebar luas ke seluruh Nusantara. Keris bukan sekadar senjata, namun juga benda pusaka kebesaran turun-temurun.",
@@ -155,8 +155,8 @@ export const cultures: Culture[] = [
     name: "Pantun",
     category: "Seni Pertunjukan",
     province: "Riau",
-    image: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?q=80&w=800&auto=format&fit=crop",
-    thumbnails: ["https://images.unsplash.com/photo-1606761568499-6d2451b23c66?q=80&w=800&auto=format&fit=crop"],
+    image: "/culture/Hand-written_Pantun_Melayu_scroll_202607021658.jpeg",
+    thumbnails: ["/culture/Hand-written_Pantun_Melayu_scroll_202607021658.jpeg"],
     description: "Tradisi lisan bersajak untuk upacara adat, pernikahan, dan sosial sebagai ekspresi budaya Melayu.",
     history: "Telah dikenal sejak zaman kuno di peradaban Melayu sebagai alat komunikasi sosial.",
     philosophy: "Memiliki struktur sampiran (pembuka) dan isi (pesan utama), mengajarkan sopan santun dan nasihat moral secara tidak langsung.",
@@ -227,7 +227,7 @@ export const unescoTimeline: UnescoItem[] = [
     id: "u8",
     year: 2023,
     name: "Pantun",
-    image: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?q=80&w=800&auto=format&fit=crop",
+    image: "/culture/Hand-written_Pantun_Melayu_scroll_202607021658.jpeg",
     description: "Tradisi lisan bersajak (diakui bersama Malaysia) untuk upacara adat, pernikahan, dan sosial sebagai ekspresi budaya Melayu."
   }
 ];
