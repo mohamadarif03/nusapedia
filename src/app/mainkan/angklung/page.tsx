@@ -4,121 +4,32 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 
-// Web Audio API Sound Synthesizer for Angklung
-class AngklungSynth {
-  ctx: AudioContext | null = null;
-
-  init() {
-    if (!this.ctx) {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    }
-    if (this.ctx.state === "suspended") {
-      this.ctx.resume();
-    }
-  }
-
-  playNote(frequency: number) {
-    this.init();
-    if (!this.ctx) return;
-
-    const now = this.ctx.currentTime;
-    
-    // We synthesize the sound using multiple oscillators to simulate the wooden tube chime
-    // Tube 1: Fundamental Pitch (Triangle wave for hollow wooden sound)
-    const osc1 = this.ctx.createOscillator();
-    const gain1 = this.ctx.createGain();
-    osc1.type = "triangle";
-    osc1.frequency.setValueAtTime(frequency, now);
-
-    // Tube 2: Octave higher (representing the smaller secondary tube in an angklung)
-    const osc2 = this.ctx.createOscillator();
-    const gain2 = this.ctx.createGain();
-    osc2.type = "sine";
-    osc2.frequency.setValueAtTime(frequency * 2, now);
-
-    // Rattling wood sound (High frequency noise burst)
-    const noiseNode = this.ctx.createBufferSource();
-    const noiseFilter = this.ctx.createBiquadFilter();
-    const noiseGain = this.ctx.createGain();
-    
-    // Create simple noise buffer
-    const bufferSize = this.ctx.sampleRate * 0.1; // 0.1 seconds of noise
-    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = Math.random() * 2 - 1;
-    }
-    noiseNode.buffer = noiseBuffer;
-    noiseFilter.type = "bandpass";
-    noiseFilter.frequency.value = 1000;
-    noiseFilter.Q.value = 5;
-
-    // Connect nodes
-    osc1.connect(gain1);
-    osc2.connect(gain2);
-    noiseNode.connect(noiseFilter);
-    noiseFilter.connect(noiseGain);
-
-    const masterGain = this.ctx.createGain();
-    gain1.connect(masterGain);
-    gain2.connect(masterGain);
-    noiseGain.connect(masterGain);
-    masterGain.connect(this.ctx.destination);
-
-    // Set rattle shake LFO / tremolo effect
-    const lfo = this.ctx.createOscillator();
-    const lfoGain = this.ctx.createGain();
-    lfo.frequency.value = 14; // Shake frequency (Hz)
-    lfoGain.gain.value = 0.25; // Depth of volume modulation
-    
-    lfo.connect(lfoGain);
-    lfoGain.connect(masterGain.gain);
-    lfo.start(now);
-    
-    // ENVELOPES
-    // Fundamental tube envelope
-    gain1.gain.setValueAtTime(0.6, now);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-
-    // Higher octave tube envelope
-    gain2.gain.setValueAtTime(0.4, now);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-
-    // Noise burst envelope (wood click/shake start)
-    noiseGain.gain.setValueAtTime(0.15, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-
-    // Master volume envelope
-    masterGain.gain.setValueAtTime(0.8, now);
-    masterGain.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
-
-    // Start / Stop oscillators
-    osc1.start(now);
-    osc2.start(now);
-    noiseNode.start(now);
-
-    osc1.stop(now + 1.4);
-    osc2.stop(now + 1.4);
-    noiseNode.stop(now + 0.2);
-    lfo.stop(now + 1.4);
-  }
-}
+// Paths to the custom physical audio assets
+const AUDIO_PATHS = [
+  "/suara-angklung/do.mp3",
+  "/suara-angklung/re.m4a",
+  "/suara-angklung/mi.m4a",
+  "/suara-angklung/fa.m4a",
+  "/suara-angklung/so.m4a",
+  "/suara-angklung/la.m4a",
+  "/suara-angklung/si.m4a",
+  "/suara-angklung/do'.m4a"
+];
 
 interface Note {
   name: string;
-  freq: number;
   key: string;
 }
 
 const NOTES: Note[] = [
-  { name: "Do", freq: 261.63, key: "C" }, // C4
-  { name: "Re", freq: 293.66, key: "D" }, // D4
-  { name: "Mi", freq: 329.63, key: "E" }, // E4
-  { name: "Fa", freq: 349.23, key: "F" }, // F4
-  { name: "Sol", freq: 392.00, key: "G" }, // G4
-  { name: "La", freq: 440.00, key: "A" }, // A4
-  { name: "Si", freq: 493.88, key: "B" }, // B4
-  { name: "Do'", freq: 523.25, key: "C'" } // C5
+  { name: "Do", key: "C" }, // C4
+  { name: "Re", key: "D" }, // D4
+  { name: "Mi", key: "E" }, // E4
+  { name: "Fa", key: "F" }, // F4
+  { name: "Sol", key: "G" }, // G4 (so.m4a)
+  { name: "La", key: "A" }, // A4
+  { name: "Si", key: "B" }, // B4
+  { name: "Do'", key: "C'" } // C5 (do'.m4a)
 ];
 
 interface Song {
@@ -151,7 +62,7 @@ const SONGS: Song[] = [
 ];
 
 export default function AngklungGamePage() {
-  const synthRef = useRef<AngklungSynth | null>(null);
+  const audioPlayersRef = useRef<HTMLAudioElement[]>([]);
   const [mode, setMode] = useState<"bebas" | "lagu">("bebas");
   const [selectedSongIdx, setSelectedSongIdx] = useState<number>(0);
   const [currentSongStep, setCurrentSongStep] = useState<number>(0);
@@ -159,16 +70,29 @@ export default function AngklungGamePage() {
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [shakingIdx, setShakingIdx] = useState<number | null>(null);
 
-  // Initialize synth safely on client
+  // Initialize audio players on client
   useEffect(() => {
-    synthRef.current = new AngklungSynth();
+    audioPlayersRef.current = AUDIO_PATHS.map((path) => {
+      const audio = new Audio(path);
+      audio.preload = "auto";
+      return audio;
+    });
   }, []);
 
   const playNote = (index: number) => {
-    if (!synthRef.current) return;
-    
-    // Play sound
-    synthRef.current.playNote(NOTES[index].freq);
+    // Stop all other playing audios so they do not overlap
+    audioPlayersRef.current.forEach((audio) => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    // Play the selected note
+    const currentAudio = audioPlayersRef.current[index];
+    if (currentAudio) {
+      currentAudio.play().catch((err) => console.log("Audio play error:", err));
+    }
     
     // Trigger shake animation
     setShakingIdx(index);
