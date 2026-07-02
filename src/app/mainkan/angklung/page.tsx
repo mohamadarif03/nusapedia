@@ -288,26 +288,71 @@ export default function AngklungGamePage() {
           </div>
         )}
 
-        {/* Play Area: The physical Angklung Image and Note Buttons */}
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8 md:p-12 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[420px]">
+        {/* Play Area: The physical Angklung Rack (8 Scaled Instruments) */}
+        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 md:p-10 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[460px] overflow-hidden">
           
-          {/* Shaking Angklung Image */}
-          <motion.div
-            animate={shakingIdx !== null ? { rotate: [0, -7, 6, -5, 4, -2, 0], x: [0, -3, 3, -2, 2, 0] } : {}}
-            transition={{ duration: 0.35 }}
-            className="relative w-64 h-64 mb-10 select-none pointer-events-none"
-          >
-            <Image 
-              src="/angklung.png" 
-              alt="Angklung Tradisional"
-              fill
-              className="object-contain"
-              priority
-            />
-          </motion.div>
+          {/* Angklung rack hanging horizontal beam */}
+          <div className="absolute top-10 inset-x-8 h-2 bg-amber-900/60 dark:bg-amber-950/60 rounded-full border-b border-white/5 shadow-inner z-0" />
+          
+          {/* Row of 8 Angklungs */}
+          <div className="flex gap-2 md:gap-4 items-end justify-center w-full mt-12 mb-10 z-10">
+            {NOTES.map((note, index) => {
+              const isShaking = shakingIdx === index;
+              const isTarget = targetNoteIdx === index;
+              
+              // Scale down dimensions progressively (lower note is larger, higher note is smaller)
+              const widthSize = 80 - index * 5; // from 80px down to 45px
+              const heightSize = 160 - index * 9; // from 160px down to 97px
 
-          {/* Do Re Mi Buttons Underneath */}
-          <div className="flex flex-wrap gap-3 md:gap-4 items-center justify-center w-full max-w-2xl border-t border-black/10 dark:border-white/10 pt-8">
+              return (
+                <div 
+                  key={note.name} 
+                  className="flex flex-col items-center cursor-pointer group"
+                  onClick={() => playNote(index)}
+                >
+                  {/* Hanging loop line */}
+                  <div className="w-0.5 h-6 bg-amber-900/40 dark:bg-amber-950/40 -mb-1" />
+
+                  {/* Individual Angklung Instrument */}
+                  <motion.div
+                    animate={isShaking ? { rotate: [0, -12, 10, -8, 5, 0], x: [0, -3, 3, -2, 2, 0] } : {}}
+                    transition={{ duration: 0.35 }}
+                    style={{ width: `${widthSize}px`, height: `${heightSize}px` }}
+                    className={`relative select-none transition-colors duration-300 rounded-xl p-1 ${
+                      isTarget 
+                        ? "bg-gold/10 border border-gold shadow-lg shadow-gold/10" 
+                        : "border border-transparent"
+                    }`}
+                  >
+                    <Image 
+                      src="/angklung.png" 
+                      alt={`Angklung ${note.name}`}
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+
+                    {/* Tiny target indicator glow */}
+                    {isTarget && (
+                      <span className="absolute -top-1 right-0 text-[10px] select-none animate-ping text-gold opacity-85">
+                        🌟
+                      </span>
+                    )}
+                  </motion.div>
+
+                  {/* Little note tag right underneath the instrument */}
+                  <span className={`text-[8px] font-bold mt-2 px-1.5 py-0.5 rounded transition-all ${
+                    isTarget ? "bg-gold text-black" : "text-black/40 dark:text-white/40"
+                  }`}>
+                    {note.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Do Re Mi Control Buttons Underneath */}
+          <div className="flex flex-wrap gap-2.5 md:gap-3 items-center justify-center w-full max-w-2xl border-t border-black/10 dark:border-white/10 pt-8">
             {NOTES.map((note, index) => {
               const isTarget = targetNoteIdx === index;
               const isPlaying = shakingIdx === index;
@@ -316,9 +361,9 @@ export default function AngklungGamePage() {
                 <button
                   key={note.name}
                   onClick={() => playNote(index)}
-                  className={`px-5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 ${
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 ${
                     isTarget
-                      ? "bg-gold text-black shadow-lg shadow-gold/20 scale-110 border-2 border-gold font-extrabold animate-pulse"
+                      ? "bg-gold text-black shadow-lg shadow-gold/20 scale-105 border border-gold font-extrabold"
                       : isPlaying
                         ? "bg-gold text-black scale-105 border border-gold"
                         : "bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:border-gold dark:hover:border-gold hover:text-gold dark:hover:text-gold hover:scale-105"
