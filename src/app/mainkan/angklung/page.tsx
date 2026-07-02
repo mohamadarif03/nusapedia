@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 
 // Paths to the custom physical audio assets
@@ -287,69 +288,45 @@ export default function AngklungGamePage() {
           </div>
         )}
 
-        {/* Play Area: The Angklungs Row */}
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8 md:p-12 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[400px]">
+        {/* Play Area: The physical Angklung Image and Note Buttons */}
+        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8 md:p-12 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[420px]">
           
-          {/* Angklung hanger horizontal beam */}
-          <div className="absolute top-10 inset-x-8 h-2 bg-amber-900/60 dark:bg-amber-950/60 rounded-full border-b border-white/5 shadow-inner" />
-          
-          <div className="flex gap-4 md:gap-8 items-end justify-center w-full mt-10">
+          {/* Shaking Angklung Image */}
+          <motion.div
+            animate={shakingIdx !== null ? { rotate: [0, -7, 6, -5, 4, -2, 0], x: [0, -3, 3, -2, 2, 0] } : {}}
+            transition={{ duration: 0.35 }}
+            className="relative w-64 h-64 mb-10 select-none pointer-events-none"
+          >
+            <Image 
+              src="/angklung.png" 
+              alt="Angklung Tradisional"
+              fill
+              className="object-contain"
+              priority
+            />
+          </motion.div>
+
+          {/* Do Re Mi Buttons Underneath */}
+          <div className="flex flex-wrap gap-3 md:gap-4 items-center justify-center w-full max-w-2xl border-t border-black/10 dark:border-white/10 pt-8">
             {NOTES.map((note, index) => {
-              const isShaking = shakingIdx === index;
               const isTarget = targetNoteIdx === index;
-              
-              // Scale height based on frequency (lower frequency = taller angklung)
-              const scaleHeight = 220 - index * 14;
+              const isPlaying = shakingIdx === index;
 
               return (
-                <div key={note.name} className="flex flex-col items-center">
-                  
-                  {/* The Angklung Tube Unit */}
-                  <motion.div
-                    onClick={() => playNote(index)}
-                    animate={isShaking ? { rotate: [0, -10, 8, -6, 4, 0] } : {}}
-                    transition={{ duration: 0.35 }}
-                    style={{ height: `${scaleHeight}px` }}
-                    className={`relative w-11 md:w-14 rounded-t-lg cursor-pointer flex justify-center group transition-colors duration-300 ${
-                      isTarget 
-                        ? "bg-gradient-to-t from-gold/50 to-gold/20 border-2 border-gold shadow-lg shadow-gold/20" 
-                        : "bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
-                    }`}
-                  >
-                    
-                    {/* Hanging rope loop */}
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full border border-amber-900/50" />
-                    
-                    {/* Inner wood frame poles (two vertical tubes) */}
-                    <div className="absolute left-[25%] bottom-0 w-2.5 bg-amber-800 dark:bg-amber-900 rounded-full shadow-inner h-[85%]" />
-                    <div className="absolute right-[25%] bottom-0 w-3 bg-amber-800 dark:bg-amber-900 rounded-full shadow-inner h-full" />
-                    
-                    {/* Horizontal connector bar */}
-                    <div className="absolute bottom-[30%] inset-x-1.5 h-2 bg-amber-700 dark:bg-amber-800 rounded-sm border-t border-b border-black/10" />
-
-                    {/* Glowing target circle in game mode */}
-                    {isTarget && (
-                      <span className="absolute top-[40%] text-sm select-none animate-ping text-gold pointer-events-none opacity-70">
-                        🌟
-                      </span>
-                    )}
-
-                  </motion.div>
-
-                  {/* Note Label underneath */}
-                  <button
-                    onClick={() => playNote(index)}
-                    className={`mt-4 px-3.5 py-2 rounded-xl text-xs font-bold uppercase transition-all ${
-                      isTarget
-                        ? "bg-gold text-black shadow-md shadow-gold/20 scale-115"
-                        : "bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black"
-                    }`}
-                  >
-                    {note.name}
-                    <span className="text-[9px] font-normal block opacity-60">{note.key}</span>
-                  </button>
-
-                </div>
+                <button
+                  key={note.name}
+                  onClick={() => playNote(index)}
+                  className={`px-5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 ${
+                    isTarget
+                      ? "bg-gold text-black shadow-lg shadow-gold/20 scale-110 border-2 border-gold font-extrabold animate-pulse"
+                      : isPlaying
+                        ? "bg-gold text-black scale-105 border border-gold"
+                        : "bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:border-gold dark:hover:border-gold hover:text-gold dark:hover:text-gold hover:scale-105"
+                  }`}
+                >
+                  {note.name}
+                  <span className="text-[9px] font-normal block opacity-60 mt-0.5">{note.key}</span>
+                </button>
               );
             })}
           </div>
