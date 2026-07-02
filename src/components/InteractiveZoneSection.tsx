@@ -56,31 +56,41 @@ export default function InteractiveZoneSection() {
 
         {/* Games Grid (Center Highlighted) */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 w-full items-center mb-16">
-          {games.map((game, index) => (
-            <div 
-              key={game.id}
-              className={`group relative rounded-3xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 overflow-hidden flex flex-col items-center justify-center p-8 cursor-pointer transition-all duration-500 hover:-translate-y-4 ${game.borderColor} ${game.layout}`}
-            >
-              {/* Radial Gradient Background */}
-              <div className={`absolute inset-0 bg-gradient-to-b ${game.color} opacity-40 group-hover:opacity-100 transition-opacity duration-500`} />
-              
-              {/* Badge */}
-              <div className="absolute top-6 right-6 px-3 py-1 bg-black/10 dark:bg-white/10 backdrop-blur-md rounded-full border border-black/20 dark:border-white/20 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black dark:text-white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                <span className="text-[10px] font-bold tracking-widest uppercase text-black dark:text-white">Main</span>
-              </div>
+          {games.map((game, index) => {
+            const linkHref = 
+              game.id === "batik" 
+                ? "/mainkan/motif-batik" 
+                : game.id === "angklung" 
+                  ? "/mainkan/angklung" 
+                  : "/mainkan/puzzle-kerajinan";
 
-              {/* Content */}
-              <div className="relative z-10 flex flex-col items-center">
-                <div className={`mb-6 p-6 rounded-full bg-white/40 dark:bg-black/40 backdrop-blur-sm border border-black/10 dark:border-white/10 group-hover:scale-110 transition-transform duration-500 ${game.iconColor}`}>
-                  {game.icon}
+            return (
+              <Link 
+                key={game.id}
+                href={linkHref}
+                className={`group relative rounded-3xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 overflow-hidden flex flex-col items-center justify-center p-8 cursor-pointer transition-all duration-500 hover:-translate-y-4 ${game.borderColor} ${game.layout}`}
+              >
+                {/* Radial Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-b ${game.color} opacity-40 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                {/* Badge */}
+                <div className="absolute top-6 right-6 px-3 py-1 bg-black/10 dark:bg-white/10 backdrop-blur-md rounded-full border border-black/20 dark:border-white/20 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black dark:text-white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-black dark:text-white">Main</span>
                 </div>
-                <h3 className={`${game.isHighlight ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'} font-medium text-black dark:text-white mb-2 text-center group-hover:text-gold transition-colors duration-300`}>
-                  {game.title}
-                </h3>
-              </div>
-            </div>
-          ))}
+  
+                {/* Content */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className={`mb-6 p-6 rounded-full bg-white/40 dark:bg-black/40 backdrop-blur-sm border border-black/10 dark:border-white/10 group-hover:scale-110 transition-transform duration-500 ${game.iconColor}`}>
+                    {game.icon}
+                  </div>
+                  <h3 className={`${game.isHighlight ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'} font-medium text-black dark:text-white mb-2 text-center group-hover:text-gold transition-colors duration-300`}>
+                    {game.title}
+                  </h3>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* CTA Button */}

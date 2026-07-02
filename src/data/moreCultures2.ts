@@ -4,7 +4,7 @@ export const moreCultures2: Culture[] = [
   // Sulawesi Tenggara
   {
     id: "sut1", slug: "lulo", name: "Tari Lulo", category: "Seni Pertunjukan", province: "Sulawesi Tenggara",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancer_performing_traditional_da…_202607021814.jpeg", thumbnails: [],
     description: "Tarian pergaulan suku Tolaki yang dilakukan dengan membentuk lingkaran dan berpegangan tangan.",
     history: "Awalnya adalah tarian sakral penyembuhan (Lulo Ngganda) dan syukuran panen.",
     philosophy: "Mencerminkan filosofi suku Tolaki 'Kalosara', yaitu persatuan, kesetaraan, dan tali persaudaraan tanpa pandang bulu."
@@ -28,7 +28,7 @@ export const moreCultures2: Culture[] = [
   // Maluku Utara
   {
     id: "mu1", slug: "soya-soya", name: "Tari Soya-Soya", category: "Seni Pertunjukan", province: "Maluku Utara",
-    image: "https://images.unsplash.com/photo-1544413155-27a1cbb0dc30?q=80&w=800&auto=format&fit=crop", thumbnails: [],
+    image: "/culture/Dancer_performing_traditional_da…_202607021821.jpeg", thumbnails: [],
     description: "Tarian patriotik Ternate yang menggunakan pedang dan salawaku, serta properti ngana-ngana.",
     history: "Diciptakan pada masa Sultan Baabullah untuk merayakan keberhasilan mengusir Portugis dari Ternate.",
     philosophy: "Semangat pantang menyerah dan kemenangan para pejuang Islam Ternate."

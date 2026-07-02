@@ -13,8 +13,9 @@ export interface Culture {
 }
 
 import { moreCultures } from "./moreCultures";
+import { moreCultures2 } from "./moreCultures2";
 
-export const cultures: Culture[] = [
+const rawCultures: Culture[] = [
   {
     id: "1",
     slug: "batik-parang",
@@ -35,7 +36,7 @@ export const cultures: Culture[] = [
   {
     id: "2",
     slug: "angklung",
-    name: "Angklung",
+    name: "Angklung Sunda",
     category: "Alat Musik",
     province: "Jawa Barat",
     image: "/culture/angklung.jpeg",
@@ -43,10 +44,10 @@ export const cultures: Culture[] = [
       "/culture/angklung.jpeg",
       "https://images.unsplash.com/photo-1516280440502-861d856d33a4?q=80&w=800&auto=format&fit=crop",
     ],
-    description: "Angklung adalah alat musik multitonal yang secara tradisional berkembang dalam masyarakat Sunda di bagian barat pulau Jawa.",
-    history: "Angklung telah dimainkan sejak zaman Kerajaan Sunda. Alat musik ini dimainkan untuk memuja Nyai Sri Pohaci (Dewi Padi) agar panen berlimpah.",
-    philosophy: "Satu buah angklung hanya menghasilkan satu nada. Agar menjadi sebuah melodi yang indah, diperlukan banyak angklung yang dimainkan bersama. Ini melambangkan kerja sama, gotong royong, dan harmoni dalam masyarakat.",
-    makingProcess: "Angklung terbuat dari bambu hitam (awi wulung) atau bambu putih (awi temen). Bambu dipotong dan dikeringkan berbulan-bulan, lalu diraut dan ditala bunyinya hingga presisi."
+    description: "Angklung adalah alat musik multitonal (bernada ganda) yang secara tradisional berkembang dalam masyarakat Sunda.",
+    history: "Telah dimainkan sejak masa Kerajaan Sunda (abad ke-12) sebagai alat musik pemujaan terhadap Dewi Sri (Dewi Padi) agar diberkahi kesuburan tanah.",
+    philosophy: "Bunyi angklung yang harmonis hanya tercipta jika dimainkan secara bersama-sama, mengajarkan gotong-royong, toleransi, dan keselarasan sosial.",
+    makingProcess: "Dibuat dari bambu khusus (bambu hitam atau wulung). Bambu dipotong, dikeringkan, kemudian diraut bagian tabungnya dengan sangat teliti untuk menyesuaikan frekuensi nadanya."
   },
   {
     id: "3",
@@ -59,39 +60,24 @@ export const cultures: Culture[] = [
       "/culture/wayangkulit.jpeg",
       "https://images.unsplash.com/photo-1583091942171-897b7b13735a?q=80&w=800&auto=format&fit=crop",
     ],
-    description: "Wayang Kulit adalah seni tradisional Indonesia yang terutama berkembang di Jawa, menggunakan bayangan dari figur kulit.",
-    history: "Diperkirakan seni wayang telah ada di Nusantara semenjak 1500 SM, bermula dari pemujaan arwah leluhur (animisme). Wayang kulit kemudian berakulturasi dengan epos Hindu seperti Ramayana dan Mahabharata, dan belakangan dipakai para Wali untuk menyebarkan Islam.",
-    philosophy: "Kelir (layar) melambangkan alam semesta, gedebog (batang pisang) tempat wayang ditancapkan melambangkan bumi, belencong (lampu) melambangkan matahari. Wayang mengajarkan dualitas kehidupan antara sifat baik dan buruk.",
-    makingProcess: "Dibuat dari kulit kerbau yang dijemur hingga kaku, lalu dipahat halus sesuai dengan pakem karakter masing-masing. Setelah itu diberi warna dari bahan alami atau cat."
+    description: "Wayang Kulit adalah seni pertunjukan tradisional Indonesia yang berkembang terutama di Jawa dan Bali.",
+    history: "Telah ada sejak sebelum abad ke-10, awalnya berfungsi sebagai ritual pemujaan arwah leluhur (Hyang). Kemudian berkembang menjadi media dakwah Islam oleh Wali Songo.",
+    philosophy: "Karakter wayang (kanan baik, kiri buruk) melambangkan pergolakan batin manusia antara nafsu baik dan buruk. Layar (kelir) melambangkan alam semesta, dan lampu (blencong) melambangkan cahaya kehidupan.",
+    makingProcess: "Dibuat dari kulit kerbau yang dikeringkan dan dikerok. Pola digambar, ditatah (dilubangi kecil-kecil) dengan pahat khusus, kemudian diwarnai dengan pigmen alami dan diberi tangkai penyangga dari tanduk kerbau."
   },
   {
     id: "4",
-    slug: "rendang-padang",
-    name: "Rendang Padang",
-    category: "Kuliner",
-    province: "Sumatera Barat",
-    image: "/culture/rendangpadang.jpeg",
-    thumbnails: [
-      "/culture/rendangpadang.jpeg",
-      "https://images.unsplash.com/photo-1594212724424-9b0d62a220dc?q=80&w=800&auto=format&fit=crop",
-    ],
-    description: "Rendang adalah hidangan berbahan dasar daging sapi yang dimasak dalam suhu rendah dan waktu lama menggunakan santan dan aneka rempah-rempah.",
-    history: "Rendang pada awalnya merupakan bekal bagi masyarakat Minangkabau yang melakukan perjalanan merantau jauh ke Semenanjung Malaya karena daya tahannya yang bisa berbulan-bulan tanpa basi.",
-    philosophy: "Rendang memiliki posisi terhormat dalam budaya Minangkabau. Daging melambangkan Niniak Mamak (pemimpin adat), kelapa melambangkan Cadiak Pandai (kaum intelektual), cabai melambangkan Alim Ulama yang tegas, dan bumbu melambangkan masyarakat secara keseluruhan.",
-    makingProcess: "Membutuhkan waktu berjam-jam (biasanya 4-7 jam) memasak daging sapi, santan, lengkuas, serai, bawang putih, bawang merah, jahe, dan cabai, dipanaskan hingga kuah mengering dan minyak naik."
-  },
-  {
-    id: "5",
-    slug: "noken",
-    name: "Noken",
+    slug: "noken-papua",
+    name: "Noken Papua",
     category: "Kerajinan",
     province: "Papua",
     image: "/culture/noken.jpeg",
     thumbnails: [
       "/culture/noken.jpeg",
+      "https://images.unsplash.com/photo-1605333642358-0ce95efed1fb?q=80&w=800&auto=format&fit=crop",
     ],
-    description: "Noken adalah tas tradisional khas Papua yang dibawa dengan menggunakan kepala.",
-    history: "Noken merupakan kerajinan turun-temurun dari nenek moyang masyarakat Papua yang terbuat dari bahan alam. Pada 2012, Noken diakui oleh UNESCO sebagai Warisan Budaya Takbenda.",
+    description: "Noken adalah tas tradisional masyarakat Papua yang dibawa dengan menggunakan kepala.",
+    history: "Diwariskan secara turun-temurun lintas generasi di kalangan suku pegunungan Papua. Noken diakui UNESCO sebagai warisan budaya takbenda pada 2012.",
     philosophy: "Noken melambangkan kehidupan, kemandirian, kedamaian, dan kesuburan bagi masyarakat Papua. Membawa noken di kepala menyimbolkan bahwa perempuan memikul beban kehidupan keluarga.",
     makingProcess: "Dibuat dari serat kulit kayu pohon Manduam, pohon Nawa, atau Anggrek hutan. Serat kayu dipisahkan, dijemur, kemudian dipintal menjadi benang kuat sebelum dirajut secara manual menjadi tas."
   },
@@ -132,7 +118,7 @@ export const cultures: Culture[] = [
     image: "/culture/taribali.jpeg",
     thumbnails: ["/culture/taribali.jpeg"],
     description: "Tari Wali (sakral), Tari Bebali (semi-sakral), dan Tari Bebalih-balihan (hiburan).",
-    history: "Tari Bali sangat erat kaitannya dengan upacara keagamaan Hindu Bali sejak berabad-abad lalu.",
+    history: "Tari Bali sangat erat kaitannya dengan upacara keagamaan Hindu Bali sejak berabad-pedoman lalu.",
     philosophy: "Mencerminkan filosofi Tri Hita Karana, yaitu keharmonisan antara manusia dengan Tuhan, manusia dengan alam, dan manusia dengan sesama.",
     makingProcess: "Gerakan dipelajari sejak dini dengan fokus pada agem, tandang, dan tangkep (ekspresi wajah dan mata/nyeledet)."
   },
@@ -162,8 +148,14 @@ export const cultures: Culture[] = [
     philosophy: "Memiliki struktur sampiran (pembuka) dan isi (pesan utama), mengajarkan sopan santun dan nasihat moral secara tidak langsung.",
     makingProcess: "Diciptakan secara spontan maupun tertulis, menggunakan pola rima a-b-a-b dengan permainan kiasan kata."
   },
-  ...moreCultures
+  ...moreCultures,
+  ...moreCultures2
 ];
+
+// Only export cultures that have local photos (path starts with "/culture/")
+export const cultures: Culture[] = rawCultures.filter((c) =>
+  c.image.startsWith("/culture/")
+);
 
 export interface UnescoItem {
   id: string;
