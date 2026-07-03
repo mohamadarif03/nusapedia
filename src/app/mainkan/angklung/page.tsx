@@ -23,14 +23,14 @@ interface Note {
 }
 
 const NOTES: Note[] = [
-  { name: "Do", key: "C" }, // C4
-  { name: "Re", key: "D" }, // D4
-  { name: "Mi", key: "E" }, // E4
-  { name: "Fa", key: "F" }, // F4
-  { name: "Sol", key: "G" }, // G4 (so.m4a)
-  { name: "La", key: "A" }, // A4
-  { name: "Si", key: "B" }, // B4
-  { name: "Do'", key: "C'" } // C5 (do'.m4a)
+  { name: "Do", key: "1" },
+  { name: "Re", key: "2" },
+  { name: "Mi", key: "3" },
+  { name: "Fa", key: "4" },
+  { name: "Sol", key: "5" },
+  { name: "La", key: "6" },
+  { name: "Si", key: "7" },
+  { name: "Do'", key: "8" }
 ];
 
 interface Song {
@@ -146,16 +146,16 @@ export default function AngklungGamePage() {
         return;
       }
       
-      const key = e.key.toLowerCase();
+      const key = e.key;
       const map: Record<string, number> = {
-        "1": 0, "c": 0,
-        "2": 1, "d": 1,
-        "3": 2, "e": 2,
-        "4": 3, "f": 3,
-        "5": 4, "g": 4,
-        "6": 5, "a": 5,
-        "7": 6, "b": 6,
-        "8": 7, "h": 7
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7
       };
       if (map[key] !== undefined) {
         e.preventDefault();
@@ -415,20 +415,20 @@ export default function AngklungGamePage() {
           <div className="w-full max-w-md mt-6 relative z-10">
             <input
               type="text"
-              placeholder="Ketuk di sini untuk memunculkan keyboard HP..."
+              placeholder="Ketuk di sini untuk mengetik angka 1-8..."
               onChange={(e) => {
                 const val = e.target.value;
                 if (val.length === 0) return;
-                const char = val[val.length - 1].toLowerCase();
+                const char = val[val.length - 1];
                 const map: Record<string, number> = {
-                  "1": 0, "c": 0,
-                  "2": 1, "d": 1,
-                  "3": 2, "e": 2,
-                  "4": 3, "f": 3,
-                  "5": 4, "g": 4,
-                  "6": 5, "a": 5,
-                  "7": 6, "b": 6,
-                  "8": 7, "h": 7
+                  "1": 0,
+                  "2": 1,
+                  "3": 2,
+                  "4": 3,
+                  "5": 4,
+                  "6": 5,
+                  "7": 6,
+                  "8": 7
                 };
                 if (map[char] !== undefined) {
                   playNote(map[char]);
