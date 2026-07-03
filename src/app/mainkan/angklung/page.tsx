@@ -80,6 +80,8 @@ export default function AngklungGamePage() {
     });
   }, []);
 
+
+
   const playNote = (index: number) => {
     // Stop all other playing audios so they do not overlap
     audioPlayersRef.current.forEach((audio) => {
@@ -130,6 +132,39 @@ export default function AngklungGamePage() {
       }, 600);
     }
   };
+
+  const playNoteRef = useRef(playNote);
+  useEffect(() => {
+    playNoteRef.current = playNote;
+  });
+
+  // Listen to keyboard shortcuts on desktop
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore key events if the user is typing in the mobile keyboard input
+      if (document.activeElement?.tagName === "INPUT") {
+        return;
+      }
+      
+      const key = e.key.toLowerCase();
+      const map: Record<string, number> = {
+        "1": 0, "c": 0,
+        "2": 1, "d": 1,
+        "3": 2, "e": 2,
+        "4": 3, "f": 3,
+        "5": 4, "g": 4,
+        "6": 5, "a": 5,
+        "7": 6, "b": 6,
+        "8": 7, "h": 7
+      };
+      if (map[key] !== undefined) {
+        e.preventDefault();
+        playNoteRef.current(map[key]);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleModeChange = (newMode: "bebas" | "lagu") => {
     setMode(newMode);
@@ -374,6 +409,35 @@ export default function AngklungGamePage() {
                 </button>
               );
             })}
+          </div>
+
+          {/* Mobile Keyboard Trigger Input Helper */}
+          <div className="w-full max-w-md mt-6 relative z-10">
+            <input
+              type="text"
+              placeholder="Ketuk di sini untuk memunculkan keyboard HP..."
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val.length === 0) return;
+                const char = val[val.length - 1].toLowerCase();
+                const map: Record<string, number> = {
+                  "1": 0, "c": 0,
+                  "2": 1, "d": 1,
+                  "3": 2, "e": 2,
+                  "4": 3, "f": 3,
+                  "5": 4, "g": 4,
+                  "6": 5, "a": 5,
+                  "7": 6, "b": 6,
+                  "8": 7, "h": 7
+                };
+                if (map[char] !== undefined) {
+                  playNote(map[char]);
+                }
+                e.target.value = "";
+              }}
+              className="w-full py-3 px-10 text-xs text-center border border-black/10 dark:border-white/10 bg-white dark:bg-black rounded-xl focus:outline-none focus:ring-1 focus:ring-gold font-medium uppercase placeholder-black/30 dark:placeholder-white/30"
+            />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs opacity-40">⌨️</span>
           </div>
 
         </div>
