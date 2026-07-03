@@ -323,14 +323,31 @@ export default function AngklungGamePage() {
           </div>
         )}
 
+        {/* Responsive CSS Helper */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          .angklung-rack {
+            --angklung-scale: 0.5;
+          }
+          @media (min-width: 640px) {
+            .angklung-rack {
+              --angklung-scale: 0.8;
+            }
+          }
+          @media (min-width: 768px) {
+            .angklung-rack {
+              --angklung-scale: 1;
+            }
+          }
+        `}} />
+
         {/* Play Area: The physical Angklung Rack (8 Scaled Instruments) */}
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 md:p-10 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[460px] overflow-hidden">
+        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-4 md:p-10 mb-16 flex flex-col justify-center items-center shadow-inner relative min-h-[400px] overflow-hidden">
           
           {/* Angklung rack hanging horizontal beam */}
           <div className="absolute top-10 inset-x-8 h-2 bg-amber-900/60 dark:bg-amber-950/60 rounded-full border-b border-white/5 shadow-inner z-0" />
           
           {/* Row of 8 Angklungs */}
-          <div className="flex gap-2 md:gap-4 items-end justify-center w-full mt-12 mb-10 z-10">
+          <div className="flex gap-1.5 md:gap-4 items-end justify-center w-full mt-12 mb-10 z-10 angklung-rack">
             {NOTES.map((note, index) => {
               const isShaking = shakingIdx === index;
               const isTarget = targetNoteIdx === index;
@@ -352,8 +369,11 @@ export default function AngklungGamePage() {
                   <motion.div
                     animate={isShaking ? { rotate: [0, -12, 10, -8, 5, 0], x: [0, -3, 3, -2, 2, 0] } : {}}
                     transition={{ duration: 0.35 }}
-                    style={{ width: `${widthSize}px`, height: `${heightSize}px` }}
-                    className={`relative select-none transition-colors duration-300 rounded-xl p-1 ${
+                    style={{ 
+                      width: `calc(${widthSize}px * var(--angklung-scale))`, 
+                      height: `calc(${heightSize}px * var(--angklung-scale))` 
+                    }}
+                    className={`relative select-none transition-colors duration-300 rounded-xl p-0.5 ${
                       isTarget 
                         ? "bg-gold/10 border border-gold shadow-lg shadow-gold/10" 
                         : "border border-transparent"
