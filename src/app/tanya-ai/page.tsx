@@ -97,6 +97,70 @@ const MOCK_ANALYSES: Record<string, BatikAnalysisResult> = {
   }
 };
 
+const parseInlineMarkdown = (text: string) => {
+  // Split by bold (**text**)
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i} className="font-extrabold text-gold">{part.slice(2, -2)}</strong>;
+    }
+    
+    // Split by single bold/italic (*text*)
+    const subParts = part.split(/(\*.*?\*)/g);
+    return subParts.map((subPart, j) => {
+      if (subPart.startsWith("*") && subPart.endsWith("*")) {
+        return <em key={j} className="italic font-semibold">{subPart.slice(1, -1)}</em>;
+      }
+      return subPart;
+    });
+  });
+};
+
+const parseMarkdown = (text: string) => {
+  const lines = text.split("\n");
+  return lines.map((line, idx) => {
+    let cleanLine = line.trim();
+    if (!cleanLine) return <div key={idx} className="h-2" />;
+
+    // Headers
+    if (cleanLine.startsWith("### ")) {
+      return <h4 key={idx} className="font-bold text-xs md:text-sm mt-3 mb-1 text-gold">{parseInlineMarkdown(cleanLine.substring(4))}</h4>;
+    }
+    if (cleanLine.startsWith("## ")) {
+      return <h3 key={idx} className="font-bold text-sm md:text-base mt-4 mb-2 text-gold">{parseInlineMarkdown(cleanLine.substring(3))}</h3>;
+    }
+    if (cleanLine.startsWith("# ")) {
+      return <h2 key={idx} className="font-bold text-base md:text-lg mt-5 mb-3 text-gold">{parseInlineMarkdown(cleanLine.substring(2))}</h2>;
+    }
+
+    // Unordered lists
+    if (cleanLine.startsWith("* ") || cleanLine.startsWith("- ")) {
+      return (
+        <li key={idx} className="list-disc ml-4 my-1 text-xs md:text-sm text-black/80 dark:text-white/80">
+          {parseInlineMarkdown(cleanLine.substring(2))}
+        </li>
+      );
+    }
+
+    // Numbered lists
+    const numListMatch = cleanLine.match(/^(\d+)\.\s(.*)/);
+    if (numListMatch) {
+      return (
+        <li key={idx} className="list-decimal ml-4 my-1 text-xs md:text-sm text-black/80 dark:text-white/80">
+          {parseInlineMarkdown(numListMatch[2])}
+        </li>
+      );
+    }
+
+    // Standard paragraph
+    return (
+      <p key={idx} className="my-1 leading-relaxed text-xs md:text-sm text-black/80 dark:text-white/80">
+        {parseInlineMarkdown(cleanLine)}
+      </p>
+    );
+  });
+};
+
 export default function TanyaAIPage() {
   const [activeTab, setActiveTab] = useState<"chatbot" | "batik">("chatbot");
   
@@ -371,12 +435,12 @@ export default function TanyaAIPage() {
                       )}
                       
                       {/* Bubble Text */}
-                      <div className={`p-4 rounded-2xl text-xs md:text-sm leading-relaxed whitespace-pre-line shadow-sm border ${
+                      <div className={`p-4 rounded-2xl text-xs md:text-sm leading-relaxed shadow-sm border ${
                         msg.sender === "user" 
                           ? "bg-amber-500/10 dark:bg-amber-500/20 border-amber-500/20 dark:border-amber-500/30 text-black dark:text-white" 
                           : "bg-white dark:bg-black border-black/5 dark:border-white/5 text-black dark:text-white"
                       }`}>
-                        {msg.text}
+                        {msg.sender === "ai" ? parseMarkdown(msg.text) : msg.text}
                       </div>
                     </div>
                   ))}
