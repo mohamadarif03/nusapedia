@@ -307,25 +307,7 @@ export default function CookingGamePage() {
 
         {/* 4. Boiling Veggies rendering inside Wok once dropped */}
         <div className="absolute left-[38%] top-[34%] w-[24%] h-[20%] z-20 flex flex-wrap gap-1 items-center justify-center p-2 pointer-events-none select-none">
-          {ingredients.filter(ing => ing.isPlaced).map((ing) => (
-            <motion.div 
-              key={ing.id}
-              initial={{ scale: 0, y: -20, rotate: Math.random() * 360 }}
-              animate={isCooking ? {
-                scale: 0.75,
-                y: [0, -3, 1, -2, 0],
-                rotate: [0, 6, -6, 0],
-              } : { scale: 0.75, y: 0 }}
-              transition={isCooking ? {
-                repeat: Infinity,
-                duration: 2.5 + Math.random() * 1.5,
-                ease: "easeInOut"
-              } : {}}
-              className="w-8 h-8 flex items-center justify-center bg-black/10 rounded-full p-1"
-            >
-              {ing.svgIcon}
-            </motion.div>
-          ))}
+          {/* Vegetables removed as requested */}
         </div>
 
         {/* 5. Boiling Bubbles/Steam particles overlaying the wok */}
@@ -336,36 +318,6 @@ export default function CookingGamePage() {
             <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 1 }} className="w-3 h-3 bg-white/15 rounded-full blur-xs" />
           </div>
         )}
-
-        {/* ================= DRAGGABLE VEGETABLES OVERLAYS ================= */}
-        {ingredients.map((ing) => {
-          return (
-            <motion.div
-              key={ing.id}
-              drag={!ing.isPlaced && !isPaused}
-              dragConstraints={boardRef}
-              dragElastic={0}
-              dragTransition={{ bounceStiffness: 600, bounceDamping: 15 }}
-              onDragStart={() => handleDragStart(ing.id)}
-              onDragEnd={(e, info) => handleDragEnd(ing.id, info)}
-              whileDrag={{ scale: 1.15, zIndex: 100 }}
-              style={{
-                position: "absolute",
-                left: ing.left,
-                top: ing.top,
-                width: ing.width,
-                height: ing.height
-              }}
-              className={`flex items-center justify-center z-30 transition-opacity pointer-events-auto select-none ${
-                ing.isPlaced 
-                  ? "opacity-20 pointer-events-none cursor-default" 
-                  : "cursor-grab active:cursor-grabbing hover:scale-105"
-              }`}
-            >
-              {ing.svgIcon}
-            </motion.div>
-          );
-        })}
 
       </div>
 
