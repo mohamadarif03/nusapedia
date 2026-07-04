@@ -15,7 +15,9 @@ import {
   Bot,
   Sparkles,
   Plus,
-  Trash2
+  Trash2,
+  MessageSquare,
+  Search
 } from "lucide-react";
 
 interface Message {
@@ -441,23 +443,25 @@ export default function TanyaAIPage() {
         <div className="inline-flex bg-black/5 dark:bg-white/5 p-1.5 rounded-full border border-black/10 dark:border-white/10">
           <button
             onClick={() => setActiveTab("chatbot")}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
               activeTab === "chatbot" 
                 ? "bg-gold text-black shadow-md shadow-gold/20" 
                 : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
             }`}
           >
-            💬 Tanya Asisten
+            <MessageSquare size={14} />
+            Tanya Asisten
           </button>
           <button
             onClick={() => setActiveTab("batik")}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
               activeTab === "batik" 
                 ? "bg-gold text-black shadow-md shadow-gold/20" 
                 : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
             }`}
           >
-            🔍 Kenali Motif Batik
+            <Search size={14} />
+            Kenali Motif Batik
           </button>
         </div>
       </div>
