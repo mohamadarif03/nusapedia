@@ -188,6 +188,26 @@ export default function TanyaAIPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isTyping]);
 
+  // Load chat history from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("culture_verse_chat_history");
+    if (saved) {
+      try {
+        setChatMessages(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse saved chat history", e);
+      }
+    }
+  }, []);
+
+  // Save chat history to localStorage when changed
+  useEffect(() => {
+    if (chatMessages.length === 1 && chatMessages[0].id === "welcome") {
+      return;
+    }
+    localStorage.setItem("culture_verse_chat_history", JSON.stringify(chatMessages));
+  }, [chatMessages]);
+
   // Chat Submission Handler
   const handleSendChat = async (textToSend: string) => {
     if (!textToSend.trim()) return;
@@ -417,6 +437,34 @@ export default function TanyaAIPage() {
             {/* Right Column: Chat Box Area */}
             <div className="lg:col-span-8">
               <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl flex flex-col h-[520px]">
+                
+                {/* Chat Header */}
+                <div className="flex justify-between items-center px-6 py-4 border-b border-black/10 dark:border-white/10">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-black/75 dark:text-white/75">Nusara Online</span>
+                  </div>
+                  {chatMessages.length > 1 && (
+                    <button
+                      onClick={() => {
+                        if (confirm("Apakah Anda yakin ingin menghapus semua riwayat percakapan?")) {
+                          const defaultMsg = [
+                            {
+                              id: "welcome",
+                              sender: "ai" as const,
+                              text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+                            }
+                          ];
+                          setChatMessages(defaultMsg);
+                          localStorage.setItem("culture_verse_chat_history", JSON.stringify(defaultMsg));
+                        }
+                      }}
+                      className="text-[10px] font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors"
+                    >
+                      Hapus Riwayat
+                    </button>
+                  )}
+                </div>
                 
                 {/* Chat Feed */}
                 <div className="flex-grow p-6 overflow-y-auto flex flex-col gap-4">
