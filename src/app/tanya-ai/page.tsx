@@ -4,6 +4,17 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
+import { 
+  Send, 
+  AlertCircle, 
+  UploadCloud, 
+  Image as ImageIcon, 
+  Camera, 
+  Crop, 
+  HelpCircle, 
+  Bot,
+  Sparkles
+} from "lucide-react";
 
 interface Message {
   id: string;
@@ -94,7 +105,7 @@ export default function TanyaAIPage() {
     {
       id: "welcome",
       sender: "ai",
-      text: "Halo! Saya asisten budaya Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+      text: "Halo! Saya asisten budaya Culture Verse. Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
     }
   ]);
   const [inputText, setInputText] = useState("");
@@ -274,7 +285,7 @@ export default function TanyaAIPage() {
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-black/10 dark:border-white/10 flex gap-3 items-start text-[10px] text-black/45 dark:text-white/45 leading-relaxed">
-                  <span className="text-xs">⚠️</span>
+                  <AlertCircle size={14} className="text-amber-500 shrink-0 mt-0.5" />
                   <p>
                     Jawaban dihasilkan oleh AI dan bersifat edukatif. Selalu verifikasi ke sumber terpercaya untuk informasi lebih lanjut.
                   </p>
@@ -297,8 +308,8 @@ export default function TanyaAIPage() {
                     >
                       {/* Avatar */}
                       {msg.sender === "ai" && (
-                        <div className="w-8 h-8 rounded-full bg-gold text-black flex items-center justify-center text-xs font-bold shrink-0 select-none">
-                          🏺
+                        <div className="w-8 h-8 rounded-full bg-gold text-black flex items-center justify-center shrink-0 select-none">
+                          <Bot size={16} />
                         </div>
                       )}
                       
@@ -316,8 +327,8 @@ export default function TanyaAIPage() {
                   {/* Typing Indicator */}
                   {isTyping && (
                     <div className="flex items-start gap-3 self-start">
-                      <div className="w-8 h-8 rounded-full bg-gold text-black flex items-center justify-center text-xs font-bold shrink-0 select-none animate-pulse">
-                        🏺
+                      <div className="w-8 h-8 rounded-full bg-gold text-black flex items-center justify-center shrink-0 select-none animate-pulse">
+                        <Bot size={16} />
                       </div>
                       <div className="p-4 bg-white dark:bg-black border border-black/5 dark:border-white/5 rounded-2xl flex gap-1 items-center justify-center min-w-[60px]">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -345,7 +356,7 @@ export default function TanyaAIPage() {
                       onClick={() => handleSendChat(inputText)}
                       className="p-3 bg-black dark:bg-white text-white dark:text-black hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black rounded-xl transition-all shadow-md active:scale-95"
                     >
-                      ✈️
+                      <Send size={14} />
                     </button>
                   </div>
                 </div>
@@ -399,7 +410,7 @@ export default function TanyaAIPage() {
                     </div>
                   ) : (
                     <div className="flex flex-col items-center pointer-events-none">
-                      <span className="text-4xl mb-4 select-none">📤</span>
+                      <UploadCloud size={36} className="text-black/40 dark:text-white/40 mb-4" />
                       <span className="text-xs font-bold uppercase tracking-wider mb-2">Unggah Foto Kain Batik</span>
                       <span className="text-[10px] text-black/50 dark:text-white/50 mb-6">Format JPG, PNG, maksimal 5MB</span>
                       <button 
@@ -416,7 +427,7 @@ export default function TanyaAIPage() {
                 <button
                   onClick={runBatikAnalysis}
                   disabled={!selectedImage || isAnalyzing}
-                  className="w-full mt-6 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow disabled:opacity-30 disabled:pointer-events-none hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black"
+                  className="w-full mt-6 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow disabled:opacity-30 disabled:pointer-events-none hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black animate-none"
                 >
                   {isAnalyzing ? "AI sedang menganalisis motif..." : "Analisis Motif →"}
                 </button>
@@ -441,9 +452,12 @@ export default function TanyaAIPage() {
                     animate={{ opacity: 1 }}
                     className="flex flex-col gap-6 text-left"
                   >
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-gold tracking-widest block mb-1">Analisis Berhasil</span>
-                      <h2 className="text-2xl md:text-3xl font-extrabold">{analysisResult.motifName}</h2>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-[10px] uppercase font-bold text-gold tracking-widest block mb-1">Analisis Berhasil</span>
+                        <h2 className="text-2xl md:text-3xl font-extrabold">{analysisResult.motifName}</h2>
+                      </div>
+                      <Sparkles className="text-gold" size={24} />
                     </div>
 
                     {/* Visual characteristics bullet points */}
@@ -482,7 +496,7 @@ export default function TanyaAIPage() {
                   </motion.div>
                 ) : (
                   <div className="text-center flex flex-col items-center gap-4 py-12 max-w-sm mx-auto">
-                    <span className="text-5xl select-none opacity-40">🖼️</span>
+                    <ImageIcon size={48} className="text-black/30 dark:text-white/30" />
                     <h3 className="text-sm font-bold uppercase tracking-wider text-black/50 dark:text-white/50">
                       Hasil Analisis AI
                     </h3>
@@ -504,22 +518,22 @@ export default function TanyaAIPage() {
             Tips Agar Hasil Lebih Akurat
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex gap-3 items-start">
-              <span className="text-lg">📷</span>
+            <div className="flex gap-4 items-start">
+              <Camera size={24} className="text-gold shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold">Pencahayaan Cukup</h5>
                 <p className="text-[10px] text-black/50 dark:text-white/50 mt-1 leading-relaxed">Foto motif batik dari jarak dekat dengan pencahayaan yang merata agar garis terdeteksi jelas.</p>
               </div>
             </div>
-            <div className="flex gap-3 items-start">
-              <span className="text-lg">✂️</span>
+            <div className="flex gap-4 items-start">
+              <Crop size={24} className="text-gold shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold">Pastikan Motif Jelas</h5>
                 <p className="text-[10px] text-black/50 dark:text-white/50 mt-1 leading-relaxed">Hindari lipatan kain berlebih atau sudut pengambilan foto yang terpotong terlalu banyak.</p>
               </div>
             </div>
-            <div className="flex gap-3 items-start">
-              <span className="text-lg">❓</span>
+            <div className="flex gap-4 items-start">
+              <HelpCircle size={24} className="text-gold shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold">Tanya Lebih Spesifik</h5>
                 <p className="text-[10px] text-black/50 dark:text-white/50 mt-1 leading-relaxed">Pada asisten chatbot, semakin detail pertanyaan Anda, semakin dalam informasi edukatif yang diberikan.</p>
