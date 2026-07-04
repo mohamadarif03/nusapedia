@@ -20,12 +20,12 @@ interface Ingredient {
   id: string;
   name: string;
   isPlaced: boolean;
-  // Percentage coordinates relative to full viewport
+  // Percentage coordinates relative to full viewport tray slots
   left: string;
   top: string;
   width: string;
   height: string;
-  svgIcon: React.ReactNode;
+  imgSrc: string;
 }
 
 export default function CookingGamePage() {
@@ -43,7 +43,7 @@ export default function CookingGamePage() {
   // Responsive full-page board ref
   const boardRef = useRef<HTMLDivElement | null>(null);
 
-  // Vegetable assets precisely aligned with the background tray slots (percentage-based)
+  // Carrot asset loaded exactly from public/cooking/gado-gado/step1/wortel.png
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     {
       id: "wortel",
@@ -53,77 +53,7 @@ export default function CookingGamePage() {
       top: "73.8%",
       width: "12.5%",
       height: "11.5%",
-      svgIcon: (
-        <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-md select-none">
-          <path d="M16 44 C 20 48, 42 28, 46 22 C 49 18, 46 14, 42 14 C 36 14, 18 38, 16 44 Z" fill="#f97316" stroke="#c2410c" strokeWidth="2.5" />
-          <path d="M24 36 L28 38 M29 30 L33 32 M34 24 L38 26" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M46 22 C 51 18, 54 12, 52 10 C 47 11, 46 16, 44 18" fill="none" stroke="#22c55e" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M42 14 C 45 10, 44 4, 40 6 C 39 10, 40 13, 42 14" fill="none" stroke="#16a34a" strokeWidth="3.5" strokeLinecap="round" />
-        </svg>
-      )
-    },
-    {
-      id: "tauge",
-      name: "Tauge",
-      isPlaced: false,
-      left: "27.2%",
-      top: "73.8%",
-      width: "12.5%",
-      height: "11.5%",
-      svgIcon: (
-        <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-md select-none">
-          <path d="M22 42 C 26 36, 32 34, 38 26 C 42 22, 44 16, 42 10" fill="none" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" />
-          <path d="M38 12 C 36 8, 42 4, 44 8 C 46 10, 42 14, 38 12 Z" fill="#eab308" stroke="#ca8a04" strokeWidth="2" />
-          <path d="M22 42 C 20 44, 21 46, 19 47" fill="none" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      )
-    },
-    {
-      id: "kacang",
-      name: "Kacang P.",
-      isPlaced: false,
-      left: "39.8%",
-      top: "73.8%",
-      width: "12.5%",
-      height: "11.5%",
-      svgIcon: (
-        <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-md select-none">
-          <path d="M14 26 C 18 10, 46 10, 50 26 C 52 38, 38 48, 28 48 C 18 48, 16 40, 22 34" fill="none" stroke="#15803d" strokeWidth="5.5" strokeLinecap="round" />
-          <path d="M18 26 C 21 14, 43 14, 46 26 C 48 36, 36 44, 28 44" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-      )
-    },
-    {
-      id: "kentang",
-      name: "Kentang",
-      isPlaced: false,
-      left: "52.3%",
-      top: "73.8%",
-      width: "12.5%",
-      height: "11.5%",
-      svgIcon: (
-        <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-md select-none">
-          <path d="M16 36 C 14 24, 26 14, 38 16 C 50 18, 52 30, 48 40 C 44 48, 22 48, 16 36 Z" fill="#d97706" stroke="#b45309" strokeWidth="3" />
-          <circle cx="24" cy="26" r="2" fill="#78350f" />
-          <circle cx="38" cy="24" r="2" fill="#78350f" />
-          <circle cx="32" cy="38" r="2" fill="#78350f" />
-        </svg>
-      )
-    },
-    {
-      id: "bayam",
-      name: "Bayam",
-      isPlaced: false,
-      left: "64.8%",
-      top: "73.8%",
-      width: "12.5%",
-      height: "11.5%",
-      svgIcon: (
-        <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-md select-none">
-          <path d="M32 46 L32 14 M32 26 C 24 20, 16 24, 18 34 C 19 38, 26 40, 32 42 C 38 40, 45 38, 46 34 C 48 24, 40 20, 32 26" fill="#10b981" stroke="#047857" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M32 14 C 26 6, 12 10, 16 22 C 20 28, 28 32, 32 34 C 36 32, 44 28, 48 22 C 52 10, 38 6, 32 14 Z" fill="#059669" stroke="#047857" strokeWidth="2.5" />
-        </svg>
-      )
+      imgSrc: "/cooking/gado-gado/step1/wortel.png"
     }
   ]);
 
@@ -195,7 +125,7 @@ export default function CookingGamePage() {
       ref={boardRef}
       className="w-screen h-screen overflow-hidden relative select-none flex flex-col justify-between items-center p-4 md:p-6"
     >
-      {/* 1. Full Page Background Image (Taking 100% Viewport width and height) */}
+      {/* 1. Full Page Background Image */}
       <Image 
         src="/cooking/gado-gado/step1/bg.jpeg"
         alt="Dapur Nusantara Background"
@@ -307,7 +237,30 @@ export default function CookingGamePage() {
 
         {/* 4. Boiling Veggies rendering inside Wok once dropped */}
         <div className="absolute left-[38%] top-[34%] w-[24%] h-[20%] z-20 flex flex-wrap gap-1 items-center justify-center p-2 pointer-events-none select-none">
-          {/* Vegetables removed as requested */}
+          {ingredients.filter(ing => ing.isPlaced).map((ing) => (
+            <motion.div 
+              key={ing.id}
+              initial={{ scale: 0, y: -20, rotate: Math.random() * 360 }}
+              animate={isCooking ? {
+                scale: 0.75,
+                y: [0, -3, 1, -2, 0],
+                rotate: [0, 6, -6, 0],
+              } : { scale: 0.75, y: 0 }}
+              transition={isCooking ? {
+                repeat: Infinity,
+                duration: 2.5 + Math.random() * 1.5,
+                ease: "easeInOut"
+              } : {}}
+              className="relative w-14 h-14 flex items-center justify-center p-1"
+            >
+              <Image 
+                src={ing.imgSrc}
+                alt={ing.name}
+                fill
+                className="object-contain"
+              />
+            </motion.div>
+          ))}
         </div>
 
         {/* 5. Boiling Bubbles/Steam particles overlaying the wok */}
@@ -318,6 +271,43 @@ export default function CookingGamePage() {
             <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 1 }} className="w-3 h-3 bg-white/15 rounded-full blur-xs" />
           </div>
         )}
+
+        {/* ================= DRAGGABLE VEGETABLES OVERLAYS ================= */}
+        {ingredients.map((ing) => {
+          return (
+            <motion.div
+              key={ing.id}
+              drag={!ing.isPlaced && !isPaused}
+              dragConstraints={boardRef}
+              dragElastic={0}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 15 }}
+              onDragStart={() => handleDragStart(ing.id)}
+              onDragEnd={(e, info) => handleDragEnd(ing.id, info)}
+              whileDrag={{ scale: 1.15, zIndex: 100 }}
+              style={{
+                position: "absolute",
+                left: ing.left,
+                top: ing.top,
+                width: ing.width,
+                height: ing.height
+              }}
+              className={`flex items-center justify-center z-30 transition-opacity pointer-events-auto select-none ${
+                ing.isPlaced 
+                  ? "opacity-0 pointer-events-none cursor-default" 
+                  : "cursor-grab active:cursor-grabbing hover:scale-105"
+              }`}
+            >
+              <div className="relative w-full h-full">
+                <Image 
+                  src={ing.imgSrc}
+                  alt={ing.name}
+                  fill
+                  className="object-contain pointer-events-none select-none"
+                />
+              </div>
+            </motion.div>
+          );
+        })}
 
       </div>
 
