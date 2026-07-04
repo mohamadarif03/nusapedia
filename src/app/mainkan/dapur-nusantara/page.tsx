@@ -209,35 +209,35 @@ export default function CookingGamePage() {
         {/* Keluar Button */}
         <Link 
           href="/mainkan"
-          className="px-4 py-2.5 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all flex items-center gap-2 font-bold text-xs uppercase shadow-md backdrop-blur-md"
+          className="px-4 py-2.5 bg-white hover:bg-gold text-black hover:text-black border border-black/10 rounded-xl transition-all flex items-center gap-2 font-bold text-xs uppercase shadow-md"
         >
           <ArrowLeft size={14} /> Keluar Game
         </Link>
 
         {/* Lives Counter & Score */}
-        <div className="flex items-center gap-6 bg-black/40 border border-white/10 px-5 py-2 rounded-2xl backdrop-blur-md">
-          <div className="flex items-center gap-1.5 border-r border-white/10 pr-4">
+        <div className="flex items-center gap-6 bg-white border border-black/10 px-5 py-2 rounded-2xl shadow-md text-black">
+          <div className="flex items-center gap-1.5 border-r border-black/10 pr-4">
             {Array.from({ length: 3 }).map((_, i) => (
               <Heart 
                 key={i} 
                 size={14} 
-                className={i < lives ? "text-red-500 fill-red-500 animate-pulse" : "text-white/20"} 
+                className={i < lives ? "text-red-500 fill-red-500 animate-pulse" : "text-black/20"} 
               />
             ))}
           </div>
           <div className="text-left">
-            <span className="text-[9px] uppercase tracking-wider text-white/50 block leading-none">Skor</span>
+            <span className="text-[9px] uppercase tracking-wider text-black/50 block leading-none">Skor</span>
             <span className="text-sm font-extrabold text-gold leading-none">{score}</span>
           </div>
         </div>
 
         {/* Step Progress Display */}
-        <div className="flex items-center gap-4 bg-black/40 border border-white/10 px-5 py-2 rounded-2xl backdrop-blur-md">
+        <div className="flex items-center gap-4 bg-white border border-black/10 px-5 py-2 rounded-2xl shadow-md text-black">
           <div className="text-right">
             <span className="text-[9px] uppercase tracking-wider text-gold block leading-none">Gado-Gado</span>
-            <span className="text-[11px] font-bold text-white/80 block mt-0.5 leading-none">Step {step} dari 5</span>
+            <span className="text-[11px] font-bold text-black/80 block mt-0.5 leading-none">Step {step} dari 5</span>
           </div>
-          <div className="w-20 h-2 bg-black/40 rounded-full overflow-hidden border border-white/5 p-[1px]">
+          <div className="w-20 h-2 bg-black/10 rounded-full overflow-hidden border border-black/5 p-[1px]">
             <div 
               className="h-full bg-gold rounded-full transition-all duration-500" 
               style={{ width: `${(step / 5) * 100}%` }}
@@ -248,7 +248,7 @@ export default function CookingGamePage() {
         {/* Pause Button */}
         <button 
           onClick={() => setIsPaused(!isPaused)}
-          className="p-2.5 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all shadow-md backdrop-blur-md"
+          className="p-2.5 bg-white hover:bg-gold text-black hover:text-black border border-black/10 rounded-xl transition-all shadow-md"
         >
           {isPaused ? <Play size={14} className="fill-current" /> : <Pause size={14} className="fill-current" />}
         </button>
@@ -269,12 +269,12 @@ export default function CookingGamePage() {
         </div>
 
         {/* 2. Doneness Indicator Gauge Floating Overlay (Center Right) */}
-        <div className="absolute top-[28%] right-[4%] bg-black/60 border border-white/15 p-3 rounded-2xl flex flex-col items-center text-center backdrop-blur-md w-24 pointer-events-auto select-none z-20">
+        <div className="absolute top-[28%] right-[4%] bg-white text-black border border-black/10 p-3 rounded-2xl flex flex-col items-center text-center shadow-md w-24 pointer-events-auto select-none z-20">
           <span className="text-[8px] font-bold uppercase tracking-wider text-gold mb-2 block leading-none">
             Kematangan
           </span>
           {/* Tiny thermometer column */}
-          <div className="relative w-4 h-24 bg-black/50 rounded-full border border-white/10 flex flex-col justify-end p-[1px] overflow-hidden shadow-inner">
+          <div className="relative w-4 h-24 bg-black/10 rounded-full border border-black/5 flex flex-col justify-end p-[1px] overflow-hidden shadow-inner">
             <div 
               className={`w-full rounded-full transition-all duration-300 ${
                 doneness >= 100 ? "bg-green-500" : "bg-orange-500"
@@ -285,7 +285,7 @@ export default function CookingGamePage() {
           <span className="text-xs font-black mt-2 font-mono text-gold leading-none">
             {doneness}%
           </span>
-          <span className="text-[8px] uppercase tracking-wider text-white/50 mt-1 leading-none">
+          <span className="text-[8px] uppercase tracking-wider text-black/50 mt-1 leading-none">
             {isCooking ? "Merebus" : isFinished ? "Matang!" : "Tunggu"}
           </span>
         </div>
@@ -324,9 +324,9 @@ export default function CookingGamePage() {
       {/* ================= FOOTER / TRIVIA / NEXT CONTROLS ================= */}
       <footer className="w-full max-w-5xl px-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-4 z-20">
         {/* Educational Info box */}
-        <div className="bg-black/40 border border-white/10 p-3.5 rounded-xl max-w-xl text-left flex items-start gap-2.5 backdrop-blur-md">
+        <div className="bg-white border border-black/10 p-3.5 rounded-xl max-w-xl text-left flex items-start gap-2.5 shadow-md">
           <Sparkles size={16} className="text-gold shrink-0 mt-0.5 animate-pulse" />
-          <p className="text-[10px] text-amber-200/90 leading-relaxed font-medium">
+          <p className="text-[10px] text-amber-950 leading-relaxed font-semibold">
             &ldquo;Dalam resep tradisional Gado-Gado, sayuran direbus tidak terlalu lama (al dente) agar teksturnya tetap renyah saat dinikmati dan kandungan vitamin serta mineralnya tetap terjaga utuh.&rdquo;
           </p>
         </div>
@@ -336,7 +336,7 @@ export default function CookingGamePage() {
           {isFinished && (
             <button 
               onClick={handleRestart}
-              className="px-4 py-3 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all text-xs font-bold flex items-center gap-1.5 backdrop-blur-md"
+              className="px-4 py-3 bg-white hover:bg-gold text-black hover:text-black border border-black/10 rounded-xl transition-all text-xs font-bold flex items-center gap-1.5 shadow-md"
             >
               <RotateCw size={12} /> Ulangi
             </button>
