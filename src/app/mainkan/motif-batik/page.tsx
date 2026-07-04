@@ -1,8 +1,18 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { 
+  Palette, 
+  Trash2, 
+  ArrowLeft, 
+  RotateCw, 
+  Maximize, 
+  Move, 
+  Download, 
+  Sparkles 
+} from "lucide-react";
 
 interface BatikElement {
   id: string;
@@ -77,12 +87,16 @@ export default function BatikBuilderPage() {
   const [activeColor, setActiveColor] = useState<string>("#D97706");
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  // Drag and Drop Ref bindings
+  const dragStartRef = useRef<{ x: number; y: number; itemX: number; itemY: number } | null>(null);
+  const draggingItemIdRef = useRef<string | null>(null);
+
   const addElementToCanvas = (type: string) => {
     const newItem: PlacedElement = {
       id: `${type}_${Date.now()}`,
       type,
-      x: 150 + Math.random() * 100,
-      y: 150 + Math.random() * 100,
+      x: 200,
+      y: 200,
       rotate: 0,
       scale: 1,
       color: activeColor
@@ -107,6 +121,85 @@ export default function BatikBuilderPage() {
     }
   };
 
+  // Drag Handlers
+  const handleStartDrag = (itemId: string, e: React.MouseEvent<SVGGElement> | React.TouchEvent<SVGGElement>) => {
+    e.stopPropagation();
+    setSelectedItemId(itemId);
+    draggingItemIdRef.current = itemId;
+
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+    const item = canvasItems.find((item) => item.id === itemId);
+    if (!item) return;
+
+    dragStartRef.current = {
+      x: clientX,
+      y: clientY,
+      itemX: item.x,
+      itemY: item.y
+    };
+
+    // Attach listeners dynamically
+    window.addEventListener("mousemove", handleDragMove);
+    window.addEventListener("mouseup", handleDragEnd);
+    window.addEventListener("touchmove", handleDragMove, { passive: false });
+    window.addEventListener("touchend", handleDragEnd);
+  };
+
+  const handleDragMove = (e: MouseEvent | TouchEvent) => {
+    if (!dragStartRef.current || !draggingItemIdRef.current) return;
+
+    // Prevent screen scrolling when dragging elements on mobile
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+    const deltaX = clientX - dragStartRef.current.x;
+    const deltaY = clientY - dragStartRef.current.y;
+
+    // Direct 1:1 responsive scaling based on SVG viewport width
+    const svgRect = svgRef.current?.getBoundingClientRect();
+    const scaleFactor = svgRect ? 500 / svgRect.width : 1;
+
+    const newX = dragStartRef.current.itemX + deltaX * scaleFactor;
+    const newY = dragStartRef.current.itemY + deltaY * scaleFactor;
+
+    // Bound coordinates inside the canvas viewport space (with slight overlap padding)
+    const constrainedX = Math.max(-50, Math.min(450, newX));
+    const constrainedY = Math.max(-50, Math.min(450, newY));
+
+    setCanvasItems((prev) =>
+      prev.map((item) =>
+        item.id === draggingItemIdRef.current
+          ? { ...item, x: constrainedX, y: constrainedY }
+          : item
+      )
+    );
+  };
+
+  const handleDragEnd = () => {
+    dragStartRef.current = null;
+    draggingItemIdRef.current = null;
+    window.removeEventListener("mousemove", handleDragMove);
+    window.removeEventListener("mouseup", handleDragEnd);
+    window.removeEventListener("touchmove", handleDragMove);
+    window.removeEventListener("touchend", handleDragEnd);
+  };
+
+  // Cleanup drag listeners on unmount
+  useEffect(() => {
+    return () => {
+      window.removeEventListener("mousemove", handleDragMove);
+      window.removeEventListener("mouseup", handleDragEnd);
+      window.removeEventListener("touchmove", handleDragMove);
+      window.removeEventListener("touchend", handleDragEnd);
+    };
+  }, []);
+
   const downloadCanvasAsPNG = () => {
     if (!svgRef.current) return;
     
@@ -123,7 +216,7 @@ export default function BatikBuilderPage() {
       canvas.height = 500;
       const context = canvas.getContext("2d");
       if (context) {
-        // Fill canvas background (simulating brown/beige raw batik fabric)
+        // Fill canvas background (beige fabric tone)
         context.fillStyle = "#F5EBE0";
         context.fillRect(0, 0, 500, 500);
         context.drawImage(image, 0, 0, 500, 500);
@@ -156,10 +249,10 @@ export default function BatikBuilderPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-black/10 dark:border-white/10">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
-              🎨 Susun Motif Batik
+              <Palette className="text-gold" size={28} /> Susun Motif Batik
             </h1>
             <p className="text-sm text-black/60 dark:text-white/60 mt-2">
-              Rancang pola batik kreasimu sendiri di kanvas. Klik salah satu elemen di panel kiri untuk menambahkannya ke kanvas.
+              Klik/sentuh elemen motif di panel kiri untuk menambahkannya ke kanvas, lalu **drag & drop** (seret) elemen langsung di kanvas untuk menyusun pola batik kreasimu sendiri.
             </p>
           </div>
         </div>
@@ -235,14 +328,14 @@ export default function BatikBuilderPage() {
             {/* Canvas Area Container */}
             <div className="relative border border-amber-900/20 bg-[#F5EBE0] dark:bg-[#E3D5CA] rounded-3xl shadow-inner w-full aspect-square overflow-hidden flex items-center justify-center">
               
-              {/* Grid guides watermark (simulating batik draft line texture) */}
+              {/* Grid guides watermark */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,26,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,26,0.04)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
               
               {/* Dynamic SVG Elements */}
               <svg 
                 ref={svgRef}
                 viewBox="0 0 500 500" 
-                className="w-full h-full select-none"
+                className="w-full h-full select-none relative z-10"
               >
                 {canvasItems.map((item) => {
                   const elData = BATIK_ELEMENTS.find((e) => e.id === item.type);
@@ -251,11 +344,9 @@ export default function BatikBuilderPage() {
                   return (
                     <g
                       key={item.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedItemId(item.id);
-                      }}
-                      className="cursor-pointer"
+                      onMouseDown={(e) => handleStartDrag(item.id, e)}
+                      onTouchStart={(e) => handleStartDrag(item.id, e)}
+                      className="cursor-move group"
                       transform={`translate(${item.x}, ${item.y}) scale(${item.scale}) rotate(${item.rotate}, 50, 50)`}
                       style={{ color: item.color }}
                     >
@@ -286,69 +377,64 @@ export default function BatikBuilderPage() {
             {selectedItem && (
               <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-3xl flex flex-col gap-4">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50">
-                    Atur Posisi & Ukuran
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50 flex items-center gap-1.5">
+                    <Move size={14} className="text-gold" /> Atur Posisi & Ukuran
                   </h4>
                   <button 
                     onClick={() => {
                       setCanvasItems((prev) => prev.filter((item) => item.id !== selectedItemId));
                       setSelectedItemId(null);
                     }}
-                    className="text-xs font-bold text-red-500 hover:text-red-600 uppercase"
+                    className="text-xs font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1"
                   >
-                    Hapus
+                    <Trash2 size={12} /> Hapus
                   </button>
                 </div>
                 
-                {/* sliders grid */}
+                {/* Sliders grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Rotate Slider */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60">Rotasi ({selectedItem.rotate}°)</label>
-                    <input 
-                      type="range" min="0" max="360" value={selectedItem.rotate}
-                      onChange={(e) => handleUpdateItem("rotate", Number(e.target.value))}
-                      className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
-                    />
+                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60 flex justify-between">
+                      <span>Rotasi</span>
+                      <span className="text-gold">{selectedItem.rotate}°</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <RotateCw size={12} className="opacity-40" />
+                      <input 
+                        type="range" min="0" max="360" value={selectedItem.rotate}
+                        onChange={(e) => handleUpdateItem("rotate", Number(e.target.value))}
+                        className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
+                      />
+                    </div>
                   </div>
 
                   {/* Scale Slider */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60">Ukuran ({selectedItem.scale.toFixed(1)}x)</label>
-                    <input 
-                      type="range" min="0.5" max="3.0" step="0.1" value={selectedItem.scale}
-                      onChange={(e) => handleUpdateItem("scale", Number(e.target.value))}
-                      className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
-                    />
-                  </div>
-
-                  {/* Position X Slider */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60">Posisi Kiri/Kanan (X)</label>
-                    <input 
-                      type="range" min="0" max="400" value={selectedItem.x}
-                      onChange={(e) => handleUpdateItem("x", Number(e.target.value))}
-                      className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
-                    />
-                  </div>
-
-                  {/* Position Y Slider */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60">Posisi Atas/Bawah (Y)</label>
-                    <input 
-                      type="range" min="0" max="400" value={selectedItem.y}
-                      onChange={(e) => handleUpdateItem("y", Number(e.target.value))}
-                      className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
-                    />
+                    <label className="text-[10px] uppercase font-bold text-black/60 dark:text-white/60 flex justify-between">
+                      <span>Ukuran</span>
+                      <span className="text-gold">{selectedItem.scale.toFixed(1)}x</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <Maximize size={12} className="opacity-40" />
+                      <input 
+                        type="range" min="0.5" max="3.0" step="0.1" value={selectedItem.scale}
+                        onChange={(e) => handleUpdateItem("scale", Number(e.target.value))}
+                        className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-gold"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 {/* Print Philosophy of selected element */}
-                <div className="mt-2 p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl">
-                  <span className="text-[9px] uppercase font-bold text-gold block">Makna Filosofis:</span>
-                  <p className="text-[10px] text-amber-800 dark:text-amber-200 leading-relaxed mt-1">
-                    {BATIK_ELEMENTS.find((e) => e.id === selectedItem.type)?.philosophy}
-                  </p>
+                <div className="mt-2 p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl flex gap-2.5 items-start">
+                  <Sparkles size={16} className="text-gold shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-[9px] uppercase font-bold text-gold block">Makna Filosofis:</span>
+                    <p className="text-[10px] text-amber-800 dark:text-amber-200 leading-relaxed mt-1">
+                      {BATIK_ELEMENTS.find((e) => e.id === selectedItem.type)?.philosophy}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -365,9 +451,9 @@ export default function BatikBuilderPage() {
               <button
                 onClick={downloadCanvasAsPNG}
                 disabled={canvasItems.length === 0}
-                className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black transition-all disabled:opacity-30 disabled:pointer-events-none shadow-md shadow-black/5 dark:shadow-white/5"
+                className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black transition-all disabled:opacity-30 disabled:pointer-events-none shadow-md shadow-black/5 dark:shadow-white/5 flex items-center gap-1.5"
               >
-                Simpan Gambar (PNG)
+                <Download size={14} /> Simpan Gambar (PNG)
               </button>
             </div>
 
@@ -376,7 +462,7 @@ export default function BatikBuilderPage() {
               href="/mainkan"
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors self-start"
             >
-              ← Kembali ke Mainkan
+              <ArrowLeft size={12} /> Kembali ke Mainkan
             </Link>
 
           </div>
