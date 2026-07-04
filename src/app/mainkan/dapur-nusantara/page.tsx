@@ -191,13 +191,13 @@ export default function CookingGamePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090504] text-white pt-6 pb-12 flex flex-col justify-between items-center relative overflow-hidden select-none">
+    <div className="w-screen h-screen bg-[#070302] text-white flex flex-col justify-between items-center relative overflow-hidden select-none p-4 md:p-6">
       
       {/* Background decoration elements */}
       <div className="absolute inset-0 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.02] pointer-events-none z-0" />
 
       {/* ================= HEADER HUB (HUD) ================= */}
-      <header className="w-full max-w-5xl px-6 flex justify-between items-center mb-4 z-10">
+      <header className="w-full max-w-5xl px-4 flex justify-between items-center mb-4 z-20">
         {/* Keluar Button */}
         <Link 
           href="/mainkan"
@@ -246,138 +246,136 @@ export default function CookingGamePage() {
         </button>
       </header>
 
-      {/* ================= AREA UTAMA GAME BOARD (ASPECT 16:9) ================= */}
-      <main className="w-full max-w-5xl px-4 flex justify-center items-center z-10 my-auto">
-        <div 
-          ref={boardRef}
-          className="relative w-full aspect-video rounded-3xl overflow-hidden border-4 border-amber-950/40 shadow-2xl bg-black select-none"
-        >
-          {/* Mockup Background Image loaded exactly from the public directory */}
-          <Image 
-            src="/cooking/gado-gado/step1/bg.jpeg"
-            alt="Dapur Nusantara Step 1"
-            fill
-            className="object-cover pointer-events-none select-none"
-            priority
-          />
+      {/* ================= AREA UTAMA GAME BOARD (ASPECT 16:9 MAX VIEWPORT) ================= */}
+      <div 
+        ref={boardRef}
+        className="relative w-full h-full max-w-[177.78vh] max-h-[56.25vw] aspect-video rounded-3xl overflow-hidden border-4 border-amber-950/40 shadow-2xl bg-black select-none z-10 my-auto"
+      >
+        {/* Mockup Background Image loaded exactly from the public directory */}
+        <Image 
+          src="/cooking/gado-gado/step1/bg.jpeg"
+          alt="Dapur Nusantara Step 1"
+          fill
+          className="object-cover pointer-events-none select-none"
+          priority
+        />
 
-          {/* ================= OVERLAY GAMEPLAY ELEMENTS ================= */}
+        {/* ================= OVERLAY GAMEPLAY ELEMENTS ================= */}
 
-          {/* 1. Instruction Card Floating Overlay (Top Left) */}
-          <div className="absolute top-[4%] left-[4%] bg-white/95 text-black p-3.5 rounded-2xl flex items-center gap-3 shadow-lg border border-amber-200 max-w-[40%] select-none z-20">
-            <div className="w-9 h-9 bg-amber-500/10 text-amber-800 rounded-xl flex items-center justify-center shrink-0">
-              <ChefHat size={18} />
-            </div>
-            <div>
-              <span className="text-[8px] font-bold uppercase tracking-wider text-amber-700 block">Langkah 1</span>
-              <h2 className="text-xs md:text-sm font-extrabold text-amber-950 leading-tight">Rebus sayuran hingga matang!</h2>
-            </div>
+        {/* 1. Instruction Card Floating Overlay (Top Left) */}
+        <div className="absolute top-[4%] left-[4%] bg-white/95 text-black p-3.5 rounded-2xl flex items-center gap-3 shadow-lg border border-amber-200 max-w-[40%] select-none z-20">
+          <div className="w-9 h-9 bg-amber-500/10 text-amber-800 rounded-xl flex items-center justify-center shrink-0">
+            <ChefHat size={18} />
           </div>
-
-          {/* 2. Doneness Indicator Gauge Floating Overlay (Center Right) */}
-          <div className="absolute top-[28%] right-[4%] bg-black/60 border border-white/15 p-3 rounded-2xl flex flex-col items-center text-center backdrop-blur-md w-24 select-none z-20">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-gold mb-2 block leading-none">
-              Kematangan
-            </span>
-            {/* Tiny thermometer column */}
-            <div className="relative w-4 h-24 bg-black/50 rounded-full border border-white/10 flex flex-col justify-end p-[1px] overflow-hidden shadow-inner">
-              <div 
-                className={`w-full rounded-full transition-all duration-300 ${
-                  doneness >= 100 ? "bg-green-500" : "bg-orange-500"
-                }`}
-                style={{ height: `${doneness}%` }}
-              />
-            </div>
-            <span className="text-xs font-black mt-2 font-mono text-gold leading-none">
-              {doneness}%
-            </span>
-            <span className="text-[8px] uppercase tracking-wider text-white/50 mt-1 leading-none">
-              {isCooking ? "Merebus" : isFinished ? "Matang!" : "Tunggu"}
-            </span>
+          <div>
+            <span className="text-[8px] font-bold uppercase tracking-wider text-amber-700 block">Langkah 1</span>
+            <h2 className="text-xs md:text-sm font-extrabold text-amber-950 leading-tight">Rebus sayuran hingga matang!</h2>
           </div>
-
-          {/* 3. Drop Target indicator overlay inside the wok (displays only when user is actively dragging) */}
-          <AnimatePresence>
-            {activeDragId && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute left-[34%] top-[28%] w-[32%] h-[32%] border-2 border-dashed border-gold/75 bg-gold/10 rounded-full flex flex-col items-center justify-center pointer-events-none select-none z-10"
-              >
-                <Flame className="text-gold animate-bounce" size={24} />
-                <span className="text-[9px] uppercase font-bold text-gold mt-1 tracking-wider">Cemplungkan Ke Sini</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* 4. Boiling Veggies rendering inside Wok once dropped */}
-          <div className="absolute left-[38%] top-[34%] w-[24%] h-[20%] z-20 flex flex-wrap gap-1 items-center justify-center p-2 pointer-events-none select-none">
-            {ingredients.filter(ing => ing.isPlaced).map((ing) => (
-              <motion.div 
-                key={ing.id}
-                initial={{ scale: 0, y: -20, rotate: Math.random() * 360 }}
-                animate={isCooking ? {
-                  scale: 0.75,
-                  y: [0, -3, 1, -2, 0],
-                  rotate: [0, 6, -6, 0],
-                } : { scale: 0.75, y: 0 }}
-                transition={isCooking ? {
-                  repeat: Infinity,
-                  duration: 2.5 + Math.random() * 1.5,
-                  ease: "easeInOut"
-                } : {}}
-                className="w-8 h-8 flex items-center justify-center bg-black/10 rounded-full p-1"
-              >
-                {ing.svgIcon}
-              </motion.div>
-            ))}
-          </div>
-
-          {/* 5. Boiling Bubbles/Steam particles overlaying the wok */}
-          {isCooking && (
-            <div className="absolute left-[44%] top-[25%] w-[12%] h-[6%] pointer-events-none z-20 flex gap-1 justify-center">
-              <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 0 }} className="w-3 h-3 bg-white/20 rounded-full blur-xs" />
-              <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 0.5 }} className="w-4 h-4 bg-white/20 rounded-full blur-xs" />
-              <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 1 }} className="w-3 h-3 bg-white/15 rounded-full blur-xs" />
-            </div>
-          )}
-
-          {/* ================= DRAGGABLE VEGETABLES OVERLAYS ================= */}
-          {ingredients.map((ing) => {
-            return (
-              <motion.div
-                key={ing.id}
-                drag={!ing.isPlaced && !isPaused}
-                dragConstraints={boardRef}
-                dragElastic={0}
-                dragTransition={{ bounceStiffness: 600, bounceDamping: 15 }}
-                onDragStart={() => handleDragStart(ing.id)}
-                onDragEnd={(e, info) => handleDragEnd(ing.id, info)}
-                whileDrag={{ scale: 1.15, zIndex: 100 }}
-                style={{
-                  position: "absolute",
-                  left: ing.left,
-                  top: ing.top,
-                  width: ing.width,
-                  height: ing.height
-                }}
-                className={`flex items-center justify-center z-30 transition-opacity select-none ${
-                  ing.isPlaced 
-                    ? "opacity-20 pointer-events-none cursor-default" 
-                    : "cursor-grab active:cursor-grabbing hover:scale-105"
-                }`}
-              >
-                {ing.svgIcon}
-              </motion.div>
-            );
-          })}
-
         </div>
-      </main>
+
+        {/* 2. Doneness Indicator Gauge Floating Overlay (Center Right) */}
+        <div className="absolute top-[28%] right-[4%] bg-black/60 border border-white/15 p-3 rounded-2xl flex flex-col items-center text-center backdrop-blur-md w-24 select-none z-20">
+          <span className="text-[8px] font-bold uppercase tracking-wider text-gold mb-2 block leading-none">
+            Kematangan
+          </span>
+          {/* Tiny thermometer column */}
+          <div className="relative w-4 h-24 bg-black/50 rounded-full border border-white/10 flex flex-col justify-end p-[1px] overflow-hidden shadow-inner">
+            <div 
+              className={`w-full rounded-full transition-all duration-300 ${
+                doneness >= 100 ? "bg-green-500" : "bg-orange-500"
+              }`}
+              style={{ height: `${doneness}%` }}
+            />
+          </div>
+          <span className="text-xs font-black mt-2 font-mono text-gold leading-none">
+            {doneness}%
+          </span>
+          <span className="text-[8px] uppercase tracking-wider text-white/50 mt-1 leading-none">
+            {isCooking ? "Merebus" : isFinished ? "Matang!" : "Tunggu"}
+          </span>
+        </div>
+
+        {/* 3. Drop Target indicator overlay inside the wok */}
+        <AnimatePresence>
+          {activeDragId && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute left-[34%] top-[28%] w-[32%] h-[32%] border-2 border-dashed border-gold/75 bg-gold/10 rounded-full flex flex-col items-center justify-center pointer-events-none select-none z-10"
+            >
+              <Flame className="text-gold animate-bounce" size={24} />
+              <span className="text-[9px] uppercase font-bold text-gold mt-1 tracking-wider">Cemplungkan Ke Sini</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* 4. Boiling Veggies rendering inside Wok once dropped */}
+        <div className="absolute left-[38%] top-[34%] w-[24%] h-[20%] z-20 flex flex-wrap gap-1 items-center justify-center p-2 pointer-events-none select-none">
+          {ingredients.filter(ing => ing.isPlaced).map((ing) => (
+            <motion.div 
+              key={ing.id}
+              initial={{ scale: 0, y: -20, rotate: Math.random() * 360 }}
+              animate={isCooking ? {
+                scale: 0.75,
+                y: [0, -3, 1, -2, 0],
+                rotate: [0, 6, -6, 0],
+              } : { scale: 0.75, y: 0 }}
+              transition={isCooking ? {
+                repeat: Infinity,
+                duration: 2.5 + Math.random() * 1.5,
+                ease: "easeInOut"
+              } : {}}
+              className="w-8 h-8 flex items-center justify-center bg-black/10 rounded-full p-1"
+            >
+              {ing.svgIcon}
+            </motion.div>
+          ))}
+        </div>
+
+        {/* 5. Boiling Bubbles/Steam particles overlaying the wok */}
+        {isCooking && (
+          <div className="absolute left-[44%] top-[25%] w-[12%] h-[6%] pointer-events-none z-20 flex gap-1 justify-center">
+            <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 0 }} className="w-3 h-3 bg-white/20 rounded-full blur-xs" />
+            <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 0.5 }} className="w-4 h-4 bg-white/20 rounded-full blur-xs" />
+            <motion.div animate={{ y: [0, -25], opacity: [0, 0.7, 0], scale: [1, 1.3] }} transition={{ repeat: Infinity, duration: 1.8, delay: 1 }} className="w-3 h-3 bg-white/15 rounded-full blur-xs" />
+          </div>
+        )}
+
+        {/* ================= DRAGGABLE VEGETABLES OVERLAYS ================= */}
+        {ingredients.map((ing) => {
+          return (
+            <motion.div
+              key={ing.id}
+              drag={!ing.isPlaced && !isPaused}
+              dragConstraints={boardRef}
+              dragElastic={0}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 15 }}
+              onDragStart={() => handleDragStart(ing.id)}
+              onDragEnd={(e, info) => handleDragEnd(ing.id, info)}
+              whileDrag={{ scale: 1.15, zIndex: 100 }}
+              style={{
+                position: "absolute",
+                left: ing.left,
+                top: ing.top,
+                width: ing.width,
+                height: ing.height
+              }}
+              className={`flex items-center justify-center z-30 transition-opacity select-none ${
+                ing.isPlaced 
+                  ? "opacity-20 pointer-events-none cursor-default" 
+                  : "cursor-grab active:cursor-grabbing hover:scale-105"
+              }`}
+            >
+              {ing.svgIcon}
+            </motion.div>
+          );
+        })}
+
+      </div>
 
       {/* ================= FOOTER / TRIVIA / NEXT CONTROLS ================= */}
-      <footer className="w-full max-w-5xl px-6 flex flex-col md:flex-row gap-4 justify-between items-center mt-4 z-10">
+      <footer className="w-full max-w-5xl px-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-4 z-20">
         {/* Educational Info box */}
         <div className="bg-amber-500/5 border border-amber-500/20 p-3.5 rounded-xl max-w-xl text-left flex items-start gap-2.5 backdrop-blur-sm">
           <Sparkles size={16} className="text-gold shrink-0 mt-0.5 animate-pulse" />
