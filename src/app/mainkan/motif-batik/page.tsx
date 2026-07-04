@@ -11,7 +11,8 @@ import {
   Maximize, 
   Move, 
   Download, 
-  Sparkles 
+  Sparkles,
+  LayoutTemplate
 } from "lucide-react";
 
 interface BatikElement {
@@ -79,6 +80,44 @@ interface PlacedElement {
   color: string;
 }
 
+interface BatikTemplate {
+  name: string;
+  description: string;
+  elements: PlacedElement[];
+}
+
+const TEMPLATES: BatikTemplate[] = [
+  {
+    name: "Lereng Parang Klasik",
+    description: "Lidah parang berjajar diagonal melambangkan ombak samudra dan keteguhan hati.",
+    elements: [
+      { id: "parang_1", type: "parang", x: 100, y: 100, scale: 1.2, rotate: 45, color: "#92400E" },
+      { id: "parang_2", type: "parang", x: 180, y: 180, scale: 1.2, rotate: 45, color: "#92400E" },
+      { id: "parang_3", type: "parang", x: 260, y: 260, scale: 1.2, rotate: 45, color: "#92400E" },
+      { id: "parang_4", type: "parang", x: 340, y: 340, scale: 1.2, rotate: 45, color: "#92400E" },
+    ]
+  },
+  {
+    name: "Pola Kawung Geometris",
+    description: "4 Kembang Kawung tersusun dalam kotak simetris melambangkan persaudaraan dan kesucian.",
+    elements: [
+      { id: "kawung_1", type: "kawung", x: 130, y: 130, scale: 1.2, rotate: 0, color: "#D97706" },
+      { id: "kawung_2", type: "kawung", x: 270, y: 130, scale: 1.2, rotate: 0, color: "#D97706" },
+      { id: "kawung_3", type: "kawung", x: 130, y: 270, scale: 1.2, rotate: 0, color: "#D97706" },
+      { id: "kawung_4", type: "kawung", x: 270, y: 270, scale: 1.2, rotate: 0, color: "#D97706" },
+    ]
+  },
+  {
+    name: "Awan Mega Mendung",
+    description: "Kelokan awan mega mendung berjajar horizontal melambangkan ketenangan jiwa.",
+    elements: [
+      { id: "mega_1", type: "megamendung", x: 50, y: 200, scale: 1.2, rotate: 0, color: "#1E293B" },
+      { id: "mega_2", type: "megamendung", x: 180, y: 200, scale: 1.2, rotate: 0, color: "#1E293B" },
+      { id: "mega_3", type: "megamendung", x: 310, y: 200, scale: 1.2, rotate: 0, color: "#1E293B" },
+    ]
+  }
+];
+
 const COLORS = ["#D97706", "#92400E", "#000000", "#1E293B", "#FFFFFF", "#78716C"];
 
 export default function BatikBuilderPage() {
@@ -121,6 +160,18 @@ export default function BatikBuilderPage() {
     }
   };
 
+  // Apply Prearranged Layout Template
+  const applyTemplate = (elements: PlacedElement[]) => {
+    if (confirm("Menerapkan pola referensi akan menghapus motif di kanvas saat ini. Lanjutkan?")) {
+      const freshElements = elements.map((item) => ({
+        ...item,
+        id: `${item.type}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
+      }));
+      setCanvasItems(freshElements);
+      setSelectedItemId(null);
+    }
+  };
+
   // Drag Handlers
   const handleStartDrag = (itemId: string, e: React.MouseEvent<SVGGElement> | React.TouchEvent<SVGGElement>) => {
     e.stopPropagation();
@@ -150,7 +201,6 @@ export default function BatikBuilderPage() {
   const handleDragMove = (e: MouseEvent | TouchEvent) => {
     if (!dragStartRef.current || !draggingItemIdRef.current) return;
 
-    // Prevent screen scrolling when dragging elements on mobile
     if (e.cancelable) {
       e.preventDefault();
     }
@@ -161,14 +211,12 @@ export default function BatikBuilderPage() {
     const deltaX = clientX - dragStartRef.current.x;
     const deltaY = clientY - dragStartRef.current.y;
 
-    // Direct 1:1 responsive scaling based on SVG viewport width
     const svgRect = svgRef.current?.getBoundingClientRect();
     const scaleFactor = svgRect ? 500 / svgRect.width : 1;
 
     const newX = dragStartRef.current.itemX + deltaX * scaleFactor;
     const newY = dragStartRef.current.itemY + deltaY * scaleFactor;
 
-    // Bound coordinates inside the canvas viewport space (with slight overlap padding)
     const constrainedX = Math.max(-50, Math.min(450, newX));
     const constrainedY = Math.max(-50, Math.min(450, newY));
 
@@ -216,7 +264,6 @@ export default function BatikBuilderPage() {
       canvas.height = 500;
       const context = canvas.getContext("2d");
       if (context) {
-        // Fill canvas background (beige fabric tone)
         context.fillStyle = "#F5EBE0";
         context.fillRect(0, 0, 500, 500);
         context.drawImage(image, 0, 0, 500, 500);
@@ -252,7 +299,7 @@ export default function BatikBuilderPage() {
               <Palette className="text-gold" size={28} /> Susun Motif Batik
             </h1>
             <p className="text-sm text-black/60 dark:text-white/60 mt-2">
-              Klik/sentuh elemen motif di panel kiri untuk menambahkannya ke kanvas, lalu **drag & drop** (seret) elemen langsung di kanvas untuk menyusun pola batik kreasimu sendiri.
+              Klik elemen motif di panel kiri untuk menambahkannya ke kanvas, seret (drag & drop) elemen di kanvas untuk menyusun pola, atau terapkan pola referensi klasik yang sudah jadi.
             </p>
           </div>
         </div>
@@ -262,9 +309,10 @@ export default function BatikBuilderPage() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Left Column: Batik Elements Panel (col-span-5) */}
+          {/* Left Column: Panels (col-span-5) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             
+            {/* Elements Selector */}
             <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-3xl">
               <h3 className="text-sm font-bold uppercase tracking-wider text-black/50 dark:text-white/50 mb-4">
                 Pilih Elemen Motif
@@ -316,6 +364,50 @@ export default function BatikBuilderPage() {
                       activeColor === col ? "border-gold scale-110 shadow-md" : "border-transparent hover:scale-105"
                     }`}
                   />
+                ))}
+              </div>
+            </div>
+
+            {/* Reference Designs Panel */}
+            <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-3xl">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black/50 dark:text-white/50 mb-4 flex items-center gap-1.5">
+                <LayoutTemplate size={16} className="text-gold" /> Pola Referensi Klasik
+              </h3>
+              
+              <div className="flex flex-col gap-4">
+                {TEMPLATES.map((temp) => (
+                  <div 
+                    key={temp.name}
+                    onClick={() => applyTemplate(temp.elements)}
+                    className="flex gap-4 items-center bg-white dark:bg-black border border-black/10 dark:border-white/10 p-3 rounded-2xl cursor-pointer hover:border-gold hover:shadow-md transition-all group"
+                  >
+                    {/* Miniature SVG Preview of Template */}
+                    <div className="w-16 h-16 bg-[#F5EBE0] dark:bg-[#E3D5CA] rounded-xl flex-shrink-0 border border-black/5 dark:border-white/5 flex items-center justify-center overflow-hidden">
+                      <svg viewBox="0 0 500 500" className="w-full h-full pointer-events-none">
+                        {temp.elements.map((item) => {
+                          const elData = BATIK_ELEMENTS.find((e) => e.id === item.type);
+                          if (!elData) return null;
+                          return (
+                            <g
+                              key={item.id}
+                              transform={`translate(${item.x}, ${item.y}) scale(${item.scale}) rotate(${item.rotate}, 50, 50)`}
+                              style={{ color: item.color }}
+                            >
+                              <g dangerouslySetInnerHTML={{ __html: elData.svgPath }} />
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+
+                    {/* Template Description */}
+                    <div className="flex-grow text-left">
+                      <h4 className="text-xs font-bold group-hover:text-gold transition-colors">{temp.name}</h4>
+                      <p className="text-[9px] text-black/50 dark:text-white/50 leading-relaxed mt-1">
+                        {temp.description}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
