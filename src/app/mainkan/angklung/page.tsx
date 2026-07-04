@@ -4,6 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
+import { 
+  Music, 
+  Info, 
+  CheckCircle2, 
+  XCircle, 
+  Star, 
+  Keyboard, 
+  ArrowLeft 
+} from "lucide-react";
 
 // Paths to the custom physical audio assets
 const AUDIO_PATHS = [
@@ -197,7 +206,7 @@ export default function AngklungGamePage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-black/10 dark:border-white/10">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
-              🌾 Angklung Virtual
+              <Music className="text-gold" size={28} /> Angklung Virtual
             </h1>
             <p className="text-sm text-black/60 dark:text-white/60 mt-2">
               Klik bilah bambu angklung untuk memainkan nadanya menggunakan synthesizer audio real-time.
@@ -234,8 +243,8 @@ export default function AngklungGamePage() {
       <div className="max-w-5xl mx-auto px-6">
         
         {/* Info Instruction Banner */}
-        <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-5 mb-8 flex gap-4 items-start">
-          <span className="text-lg">ℹ️</span>
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-5 mb-8 flex gap-3 items-start">
+          <Info size={16} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <p className="text-xs md:text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
             {mode === "bebas" 
               ? "Klik atau ketuk salah satu tabung angklung di bawah untuk membunyikan nadanya secara bebas. Eksplorasi melodi sesukamu!" 
@@ -312,11 +321,17 @@ export default function AngklungGamePage() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className={`absolute inset-0 flex items-center justify-center backdrop-blur-sm text-lg font-bold uppercase ${
-                    feedback === "correct" ? "text-green-500 bg-green-500/5" : "text-red-500 bg-red-500/5"
-                  }`}
+                  className={`absolute inset-0 flex items-center justify-center backdrop-blur-sm text-lg font-bold uppercase`}
                 >
-                  {feedback === "correct" ? "✨ Benar!" : "❌ Salah"}
+                  {feedback === "correct" ? (
+                    <span className="flex items-center gap-1.5 text-green-500 bg-green-500/5 px-4 py-2 rounded-xl border border-green-500/20">
+                      <CheckCircle2 size={20} /> Benar!
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1.5 text-red-500 bg-red-500/5 px-4 py-2 rounded-xl border border-red-500/20">
+                      <XCircle size={20} /> Salah
+                    </span>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -389,8 +404,8 @@ export default function AngklungGamePage() {
 
                     {/* Tiny target indicator glow */}
                     {isTarget && (
-                      <span className="absolute -top-1 right-0 text-[10px] select-none animate-ping text-gold opacity-85">
-                        🌟
+                      <span className="absolute -top-1.5 right-0 animate-ping text-gold opacity-85">
+                        <Star size={10} className="fill-gold" />
                       </span>
                     )}
                   </motion.div>
@@ -457,17 +472,16 @@ export default function AngklungGamePage() {
               }}
               className="w-full py-3 px-10 text-xs text-center border border-black/10 dark:border-white/10 bg-white dark:bg-black rounded-xl focus:outline-none focus:ring-1 focus:ring-gold font-medium uppercase placeholder-black/30 dark:placeholder-white/30"
             />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs opacity-40">⌨️</span>
+            <Keyboard size={14} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40" />
           </div>
 
         </div>
 
-        {/* Back Link */}
         <Link 
           href="/mainkan"
           className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
         >
-          ← Kembali ke Mainkan
+          <ArrowLeft size={12} /> Kembali ke Mainkan
         </Link>
 
       </div>
