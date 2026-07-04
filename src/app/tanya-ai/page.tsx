@@ -270,9 +270,7 @@ export default function TanyaAIPage() {
     setSessions((prev) => {
       return prev.map((s) => {
         if (s.id === activeSessionId) {
-          const newTitle = s.title === "Percakapan Baru"
-            ? textToSend.length > 30 ? `${textToSend.substring(0, 30).trim()}...` : textToSend
-            : s.title;
+          const newTitle = s.title === "Percakapan Baru" ? textToSend : s.title;
           return {
             ...s,
             title: newTitle,
