@@ -186,7 +186,7 @@ export default function CookingGamePage() {
               href="/mainkan"
               className="px-3 py-2 bg-white/5 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs uppercase"
             >
-              <ArrowLeft size={14} /> Kembali
+              <ArrowLeft size={14} /> Keluar Game
             </Link>
             <div className="flex items-center gap-1 bg-red-500/10 px-3 py-1.5 rounded-xl border border-red-500/20">
               {Array.from({ length: 3 }).map((_, i) => (
