@@ -516,30 +516,7 @@ export default function TanyaAIPage() {
                   })}
                 </div>
 
-                <div className="h-px bg-black/10 dark:bg-white/10 my-4" />
 
-                {/* Question suggestions */}
-                <h3 className="text-[10px] font-bold uppercase tracking-wider text-black/45 dark:text-white/45 mb-3">
-                  Contoh Topik Tanya
-                </h3>
-                <div className="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
-                  {[
-                    "Apa makna motif batik parang?",
-                    "Darimana asal usul angklung?",
-                    "Apa perbedaan batik tulis dan batik cap?",
-                    "Kerajinan khas Kalimantan?",
-                    "Mengapa wayang diakui UNESCO?",
-                    "Kuliner khas Sulawesi?"
-                  ].map((query) => (
-                    <button
-                      key={query}
-                      onClick={() => handleSuggestionClick(query)}
-                      className="w-full p-2 bg-white/40 dark:bg-black/40 border border-black/5 dark:border-white/5 hover:border-gold dark:hover:border-gold rounded-lg text-left text-[10px] text-black/70 dark:text-white/70 truncate transition-all"
-                    >
-                      {query}
-                    </button>
-                  ))}
-                </div>
 
                 <div className="mt-auto pt-4 flex gap-2 items-start text-[9px] text-black/45 dark:text-white/45 leading-relaxed">
                   <AlertCircle size={12} className="text-amber-500 shrink-0 mt-0.5" />
@@ -591,7 +568,32 @@ export default function TanyaAIPage() {
                     </div>
                   ))}
 
-                  {/* Typing Indicator */}
+                  {/* If this is a fresh conversation (only has welcome message), show clean suggestion cards in a grid */}
+                  {chatMessages.length === 1 && !isTyping && (
+                    <div className="mt-6 flex flex-col gap-3 max-w-2xl mx-auto w-full">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40 block mb-1">
+                        Rekomendasi Topik Tanya:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {[
+                          "Apa makna motif batik parang?",
+                          "Darimana asal usul angklung?",
+                          "Apa perbedaan batik tulis dan batik cap?",
+                          "Kerajinan khas apa yang berasal dari Kalimantan?",
+                          "Mengapa wayang diakui UNESCO?",
+                          "Apa saja kuliner khas Sulawesi?"
+                        ].map((query) => (
+                          <button
+                            key={query}
+                            onClick={() => handleSuggestionClick(query)}
+                            className="p-3 bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:border-gold dark:hover:border-gold hover:text-gold dark:hover:text-gold rounded-2xl text-left text-xs font-semibold leading-relaxed transition-all shadow-sm transform active:scale-98"
+                          >
+                            {query}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   {isTyping && (
                     <div className="flex items-start gap-3 self-start">
                       <div className="w-8 h-8 rounded-full bg-gold text-black flex items-center justify-center shrink-0 select-none animate-pulse">
