@@ -169,7 +169,7 @@ export default function TanyaAIPage() {
     {
       id: "welcome",
       sender: "ai",
-      text: "Halo! Saya asisten budaya Culture Verse. Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
     }
   ]);
   const [inputText, setInputText] = useState("");
