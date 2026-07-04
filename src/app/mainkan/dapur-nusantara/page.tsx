@@ -20,7 +20,7 @@ interface Ingredient {
   id: string;
   name: string;
   isPlaced: boolean;
-  // Percentage coordinates on the 16:9 background tray
+  // Percentage coordinates relative to full viewport
   left: string;
   top: string;
   width: string;
@@ -40,7 +40,7 @@ export default function CookingGamePage() {
   const [isFinished, setIsFinished] = useState(false);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
-  // Responsive container ref
+  // Responsive full-page board ref
   const boardRef = useRef<HTMLDivElement | null>(null);
 
   // Vegetable assets precisely aligned with the background tray slots (percentage-based)
@@ -191,17 +191,25 @@ export default function CookingGamePage() {
   };
 
   return (
-    <div className="w-screen h-screen bg-[#070302] text-white flex flex-col justify-between items-center relative overflow-hidden select-none p-4 md:p-6">
-      
-      {/* Background decoration elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.02] pointer-events-none z-0" />
+    <div 
+      ref={boardRef}
+      className="w-screen h-screen overflow-hidden relative select-none flex flex-col justify-between items-center p-4 md:p-6"
+    >
+      {/* 1. Full Page Background Image (Taking 100% Viewport width and height) */}
+      <Image 
+        src="/cooking/gado-gado/step1/bg.jpeg"
+        alt="Dapur Nusantara Background"
+        fill
+        className="object-cover pointer-events-none select-none z-0"
+        priority
+      />
 
       {/* ================= HEADER HUB (HUD) ================= */}
       <header className="w-full max-w-5xl px-4 flex justify-between items-center mb-4 z-20">
         {/* Keluar Button */}
         <Link 
           href="/mainkan"
-          className="px-4 py-2.5 bg-white/5 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all flex items-center gap-2 font-bold text-xs uppercase shadow-md"
+          className="px-4 py-2.5 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all flex items-center gap-2 font-bold text-xs uppercase shadow-md backdrop-blur-md"
         >
           <ArrowLeft size={14} /> Keluar Game
         </Link>
@@ -240,30 +248,17 @@ export default function CookingGamePage() {
         {/* Pause Button */}
         <button 
           onClick={() => setIsPaused(!isPaused)}
-          className="p-2.5 bg-white/5 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all shadow-md"
+          className="p-2.5 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all shadow-md backdrop-blur-md"
         >
           {isPaused ? <Play size={14} className="fill-current" /> : <Pause size={14} className="fill-current" />}
         </button>
       </header>
 
-      {/* ================= AREA UTAMA GAME BOARD (ASPECT 16:9 MAX VIEWPORT) ================= */}
-      <div 
-        ref={boardRef}
-        className="relative w-full h-full max-w-[177.78vh] max-h-[56.25vw] aspect-video rounded-3xl overflow-hidden border-4 border-amber-950/40 shadow-2xl bg-black select-none z-10 my-auto"
-      >
-        {/* Mockup Background Image loaded exactly from the public directory */}
-        <Image 
-          src="/cooking/gado-gado/step1/bg.jpeg"
-          alt="Dapur Nusantara Step 1"
-          fill
-          className="object-cover pointer-events-none select-none"
-          priority
-        />
-
-        {/* ================= OVERLAY GAMEPLAY ELEMENTS ================= */}
-
+      {/* ================= MIDDLE GAME AREA LAYOUT OVERLAYS ================= */}
+      <div className="relative flex-grow w-full max-w-5xl z-10 pointer-events-none">
+        
         {/* 1. Instruction Card Floating Overlay (Top Left) */}
-        <div className="absolute top-[4%] left-[4%] bg-white/95 text-black p-3.5 rounded-2xl flex items-center gap-3 shadow-lg border border-amber-200 max-w-[40%] select-none z-20">
+        <div className="absolute top-[4%] left-[4%] bg-white/95 text-black p-3.5 rounded-2xl flex items-center gap-3 shadow-lg border border-amber-200 max-w-[40%] pointer-events-auto select-none z-20">
           <div className="w-9 h-9 bg-amber-500/10 text-amber-800 rounded-xl flex items-center justify-center shrink-0">
             <ChefHat size={18} />
           </div>
@@ -274,7 +269,7 @@ export default function CookingGamePage() {
         </div>
 
         {/* 2. Doneness Indicator Gauge Floating Overlay (Center Right) */}
-        <div className="absolute top-[28%] right-[4%] bg-black/60 border border-white/15 p-3 rounded-2xl flex flex-col items-center text-center backdrop-blur-md w-24 select-none z-20">
+        <div className="absolute top-[28%] right-[4%] bg-black/60 border border-white/15 p-3 rounded-2xl flex flex-col items-center text-center backdrop-blur-md w-24 pointer-events-auto select-none z-20">
           <span className="text-[8px] font-bold uppercase tracking-wider text-gold mb-2 block leading-none">
             Kematangan
           </span>
@@ -361,7 +356,7 @@ export default function CookingGamePage() {
                 width: ing.width,
                 height: ing.height
               }}
-              className={`flex items-center justify-center z-30 transition-opacity select-none ${
+              className={`flex items-center justify-center z-30 transition-opacity pointer-events-auto select-none ${
                 ing.isPlaced 
                   ? "opacity-20 pointer-events-none cursor-default" 
                   : "cursor-grab active:cursor-grabbing hover:scale-105"
@@ -377,7 +372,7 @@ export default function CookingGamePage() {
       {/* ================= FOOTER / TRIVIA / NEXT CONTROLS ================= */}
       <footer className="w-full max-w-5xl px-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-4 z-20">
         {/* Educational Info box */}
-        <div className="bg-amber-500/5 border border-amber-500/20 p-3.5 rounded-xl max-w-xl text-left flex items-start gap-2.5 backdrop-blur-sm">
+        <div className="bg-black/40 border border-white/10 p-3.5 rounded-xl max-w-xl text-left flex items-start gap-2.5 backdrop-blur-md">
           <Sparkles size={16} className="text-gold shrink-0 mt-0.5 animate-pulse" />
           <p className="text-[10px] text-amber-200/90 leading-relaxed font-medium">
             &ldquo;Dalam resep tradisional Gado-Gado, sayuran direbus tidak terlalu lama (al dente) agar teksturnya tetap renyah saat dinikmati dan kandungan vitamin serta mineralnya tetap terjaga utuh.&rdquo;
@@ -389,7 +384,7 @@ export default function CookingGamePage() {
           {isFinished && (
             <button 
               onClick={handleRestart}
-              className="px-4 py-3 bg-white/10 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all text-xs font-bold flex items-center gap-1.5"
+              className="px-4 py-3 bg-black/40 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all text-xs font-bold flex items-center gap-1.5 backdrop-blur-md"
             >
               <RotateCw size={12} /> Ulangi
             </button>
