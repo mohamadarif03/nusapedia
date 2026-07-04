@@ -502,7 +502,7 @@ export default function TanyaAIPage() {
                             : "bg-white dark:bg-black hover:border-gold dark:hover:border-gold border-black/5 dark:border-white/5 text-black dark:text-white"
                         }`}
                       >
-                        <span className="truncate max-w-[80%]">{s.title}</span>
+                        <span className="truncate flex-1 pr-2 text-left">{s.title}</span>
                         <button
                           onClick={(e) => handleDeleteSession(s.id, e)}
                           className={`opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500 rounded transition-all text-red-500 hover:text-white ${
