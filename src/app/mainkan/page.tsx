@@ -3,6 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { 
+  Music, 
+  Palette, 
+  Map, 
+  Headphones, 
+  Lightbulb, 
+  Brain,
+  ChevronRight
+} from "lucide-react";
 
 const FUN_FACTS = [
   "Tahukah kamu? Indonesia memiliki lebih dari 300 jenis kerajinan tradisional yang tersebar dari Sabang hingga Merauke.",
@@ -24,7 +33,7 @@ export default function PlayHubPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white pt-32 pb-24 transition-colors duration-300">
       
-      {/* Header Section */}
+      {/* Header Halaman */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 text-center mb-16">
         <nav className="flex justify-center text-xs font-medium tracking-widest uppercase mb-6 text-black/50 dark:text-white/50">
           <Link href="/" className="hover:text-amber-500 transition-colors">Beranda</Link>
@@ -34,15 +43,15 @@ export default function PlayHubPage() {
         <span className="text-gold tracking-[0.2em] uppercase text-xs mb-4 font-bold block">
           Zona Interaktif
         </span>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight">
+        <h1 className="text-4xl md:text-5xl font-medium mb-6 leading-tight">
           Belajar Budaya Sambil Bermain
         </h1>
-        <p className="text-black/60 dark:text-white/60 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-          Rasakan pengalaman budaya nusantara lewat permainan interaktif — dari memainkan alat musik tradisional hingga menyusun motif batik dan menguji wawasanmu.
+        <p className="text-black/60 dark:text-white/60 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+          Rasakan pengalaman budaya nusantara lewat permainan interaktif - dari memainkan alat musik tradisional hingga menyusun motif batik dan menguji wawasanmu.
         </p>
       </div>
 
-      {/* Main Content: 3 Game Cards */}
+      {/* Grid Kartu Game */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
@@ -56,9 +65,9 @@ export default function PlayHubPage() {
               <motion.div 
                 animate={{ rotate: [0, -3, 3, -3, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="text-6xl filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300"
+                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
               >
-                🎋🎵
+                <Music size={56} strokeWidth={1.5} />
               </motion.div>
               {/* Subtle background waves */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.05)_0%,transparent_70%)] pointer-events-none" />
@@ -75,7 +84,7 @@ export default function PlayHubPage() {
             <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
               <div className="flex justify-between items-center text-xs">
                 <span className="flex items-center gap-1.5 text-black/50 dark:text-white/50 font-medium">
-                  🎧 Butuh suara
+                  <Headphones size={14} className="text-gold" /> Butuh suara
                 </span>
                 <span className="px-2.5 py-1 bg-green-500/10 text-green-500 font-bold uppercase rounded-full text-[10px] tracking-wide">
                   Mudah
@@ -83,9 +92,9 @@ export default function PlayHubPage() {
               </div>
               <Link 
                 href="/mainkan/angklung"
-                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5"
+                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5 flex items-center justify-center gap-1.5"
               >
-                Mainkan →
+                Mainkan <ChevronRight size={14} />
               </Link>
             </div>
           </motion.div>
@@ -100,9 +109,9 @@ export default function PlayHubPage() {
               <motion.div 
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                className="text-6xl filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300"
+                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
               >
-                🎨🖌️
+                <Palette size={56} strokeWidth={1.5} />
               </motion.div>
               {/* Pattern lines grid background */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(245,158,11,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(245,158,11,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
@@ -119,7 +128,7 @@ export default function PlayHubPage() {
             <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
               <div className="flex justify-between items-center text-xs">
                 <span className="flex items-center gap-1.5 text-black/50 dark:text-white/50 font-medium">
-                  💡 Kreativitas
+                  <Lightbulb size={14} className="text-gold" /> Kreativitas
                 </span>
                 <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 font-bold uppercase rounded-full text-[10px] tracking-wide">
                   Menengah
@@ -127,9 +136,9 @@ export default function PlayHubPage() {
               </div>
               <Link 
                 href="/mainkan/motif-batik"
-                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5"
+                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5 flex items-center justify-center gap-1.5"
               >
-                Mainkan →
+                Mainkan <ChevronRight size={14} />
               </Link>
             </div>
           </motion.div>
@@ -144,9 +153,9 @@ export default function PlayHubPage() {
               <motion.div 
                 animate={{ y: [0, -4, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="text-6xl filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300"
+                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
               >
-                🗺️🏺
+                <Map size={56} strokeWidth={1.5} />
               </motion.div>
               {/* Map grid background */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.03)_0%,transparent_70%)] pointer-events-none" />
@@ -163,7 +172,7 @@ export default function PlayHubPage() {
             <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
               <div className="flex justify-between items-center text-xs">
                 <span className="flex items-center gap-1.5 text-black/50 dark:text-white/50 font-medium">
-                  🧠 Uji Otak
+                  <Brain size={14} className="text-gold" /> Uji Otak
                 </span>
                 <span className="px-2.5 py-1 bg-red-500/10 text-red-500 font-bold uppercase rounded-full text-[10px] tracking-wide">
                   Menantang
@@ -171,9 +180,9 @@ export default function PlayHubPage() {
               </div>
               <Link 
                 href="/mainkan/puzzle-kerajinan"
-                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5"
+                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5 flex items-center justify-center gap-1.5"
               >
-                Mainkan →
+                Mainkan <ChevronRight size={14} />
               </Link>
             </div>
           </motion.div>
@@ -188,7 +197,7 @@ export default function PlayHubPage() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-6 text-center max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-4 justify-center"
         >
-          <span className="text-2xl select-none">💡</span>
+          <Lightbulb size={24} className="text-gold shrink-0" />
           <p className="text-sm font-medium text-amber-800 dark:text-amber-200 leading-relaxed">
             {funFact || "Memuat fakta seru nusantara..."}
           </p>
