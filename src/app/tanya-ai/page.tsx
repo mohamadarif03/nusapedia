@@ -114,6 +114,7 @@ export default function TanyaAIPage() {
 
   // Batik Upload State
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<BatikAnalysisResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -124,7 +125,7 @@ export default function TanyaAIPage() {
   }, [chatMessages, isTyping]);
 
   // Chat Submission Handler
-  const handleSendChat = (textToSend: string) => {
+  const handleSendChat = async (textToSend: string) => {
     if (!textToSend.trim()) return;
 
     // Add user message
@@ -139,16 +140,40 @@ export default function TanyaAIPage() {
     // Trigger typing simulation
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: textToSend })
+      });
+      
+      const data = await response.json();
       setIsTyping(false);
-      const aiResponseText = getAIResponse(textToSend);
-      const aiMsg: Message = {
+
+      if (data.error) {
+        const errorMsg: Message = {
+          id: `ai_${Date.now()}`,
+          sender: "ai",
+          text: `Maaf, terjadi kesalahan: ${data.error}`
+        };
+        setChatMessages((prev) => [...prev, errorMsg]);
+      } else {
+        const aiMsg: Message = {
+          id: `ai_${Date.now()}`,
+          sender: "ai",
+          text: data.text
+        };
+        setChatMessages((prev) => [...prev, aiMsg]);
+      }
+    } catch (err: any) {
+      setIsTyping(false);
+      const errorMsg: Message = {
         id: `ai_${Date.now()}`,
         sender: "ai",
-        text: aiResponseText
+        text: `Gagal terhubung ke AI. Silakan periksa koneksi Anda.`
       };
-      setChatMessages((prev) => [...prev, aiMsg]);
-    }, 1500);
+      setChatMessages((prev) => [...prev, errorMsg]);
+    }
   };
 
   // Chat Suggestion click
@@ -162,6 +187,7 @@ export default function TanyaAIPage() {
       const file = e.target.files[0];
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
+      setSelectedFile(file);
       setAnalysisResult(null); // Reset previous result
     }
   };
@@ -180,22 +206,53 @@ export default function TanyaAIPage() {
       const file = e.dataTransfer.files[0];
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
+      setSelectedFile(file);
       setAnalysisResult(null);
     }
   };
 
   const runBatikAnalysis = () => {
-    if (!selectedImage) return;
+    if (!selectedFile) return;
 
     setIsAnalyzing(true);
 
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      // Select mock analysis results randomly (or based on file name if match found)
-      const keys = Object.keys(MOCK_ANALYSES);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      setAnalysisResult(MOCK_ANALYSES[randomKey]);
-    }, 2000);
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result as string).split(",")[1];
+        const mimeType = selectedFile.type;
+
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: base64Data, mimeType })
+        });
+
+        const data = await response.json();
+        setIsAnalyzing(false);
+
+        if (data.error) {
+          alert(`Analisis gagal: ${data.error}`);
+        } else {
+          try {
+            // The response should be a raw JSON string
+            const cleanedText = data.text.trim();
+            const result: BatikAnalysisResult = JSON.parse(cleanedText);
+            setAnalysisResult(result);
+          } catch (jsonErr) {
+            console.error("Failed to parse JSON response from Gemini:", data.text);
+            // Fallback mock if JSON parsing fails due to AI outputting text formatting
+            const keys = Object.keys(MOCK_ANALYSES);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            setAnalysisResult(MOCK_ANALYSES[randomKey]);
+          }
+        }
+      } catch (err) {
+        setIsAnalyzing(false);
+        alert("Gagal menganalisis gambar. Terjadi kesalahan jaringan.");
+      }
+    };
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
