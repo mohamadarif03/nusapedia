@@ -1,9 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
+import { 
+  Map, 
+  Heart, 
+  Trophy, 
+  ArrowLeft, 
+  Sparkles, 
+  CheckCircle2, 
+  XCircle, 
+  ChevronRight,
+  RefreshCw
+} from "lucide-react";
 
 interface PuzzleItem {
   id: string;
@@ -15,127 +26,81 @@ interface PuzzleItem {
 
 const PUZZLE_ITEMS: PuzzleItem[] = [
   {
-    id: "rencong",
-    name: "Rencong",
-    image: "/culture/rencongaceh.jpeg",
-    province: "Aceh",
-    fact: "Rencong merupakan senjata tajam tradisional bermata satu khas Aceh dengan gagang meliuk menyerupai kaligrafi 'Bismillah'."
-  },
-  {
-    id: "ulos",
-    name: "Kain Ulos",
-    image: "/culture/Batak_Ulos_fabric_displayed_studio_202607021643.jpeg",
-    province: "Sumatera Utara",
-    fact: "Kain Ulos dibuat dengan ditenun secara tradisional oleh suku Batak dan diselimutkan pada tubuh dalam upacara adat sebagai lambang berkat kehangatan."
-  },
-  {
-    id: "gadang",
-    name: "Rumah Gadang",
-    image: "/culture/Minangkabau_house_model_displayed_202607021648.jpeg",
-    province: "Sumatera Barat",
-    fact: "Rumah Gadang berciri khas atap runcing menyerupai tanduk kerbau (gonjong) dan dihuni secara turun-temurun berdasarkan garis ibu (matrilineal)."
-  },
-  {
-    id: "songket",
-    name: "Songket Palembang",
-    image: "/culture/Songket_fabric_on_hanger_202607021701.jpeg",
-    province: "Sumatera Selatan",
-    fact: "Songket Palembang adalah kain tenun sutra mewah bertenun benang emas yang diwariskan dari kemegahan era Kerajaan Sriwijaya."
-  },
-  {
-    id: "ondel",
-    name: "Ondel-Ondel",
-    image: "/culture/Miniature_Ondel-ondel_puppets_di…_202607021738.jpeg",
-    province: "DKI Jakarta",
-    fact: "Ondel-Ondel adalah boneka raksasa ikon Betawi setinggi 2.5 meter yang dahulu difungsikan sebagai penolak bala atau gangguan roh halus."
-  },
-  {
-    id: "angklung",
-    name: "Angklung Sunda",
-    image: "/culture/angklung.jpeg",
-    province: "Jawa Barat",
-    fact: "Angklung adalah alat musik multitonal dari bambu khas Sunda yang bunyinya tercipta dari benturan tabung bambu yang dimainkan secara ansambel."
-  },
-  {
     id: "wayang",
-    name: "Wayang Kulit",
-    image: "/culture/wayangkulit.jpeg",
-    province: "Jawa Tengah",
-    fact: "Wayang Kulit dipahat di atas kulit kerbau tipis dan dimainkan oleh seorang Dalang di balik layar sorotan lampu."
+    name: "Wayang Golek",
+    image: "/culture/Miniature_Ondel-ondel_puppets_di._202607021738.jpeg", // Using Ondel-ondel as proxy if no wayang, or we can use local images
+    province: "Jawa Barat",
+    fact: "Wayang Golek merupakan seni pertunjukan boneka kayu khas Sunda Jawa Barat, yang cerita lakon utamanya bersumber dari kisah Ramayana dan Mahabarata."
   },
   {
     id: "sasando",
     name: "Sasando",
-    image: "/culture/Sasando_musical_instrument_displ…_202607021745.jpeg",
+    image: "/culture/Sasando_musical_instrument_displ._202607021745.jpeg",
     province: "Nusa Tenggara Timur",
-    fact: "Sasando adalah alat musik petik berdawai khas pulau Rote NTT dengan wadah resonator meliuk yang terbuat dari daun pohon lontar kering."
-  },
-  {
-    id: "sape",
-    name: "Sape",
-    image: "/culture/Sape_musical_instrument_displayed_202607021809.jpeg",
-    province: "Kalimantan Utara",
-    fact: "Sape adalah alat musik petik sejenis kecapi khas suku Dayak dengan ukiran artistik kayu bermotif floral atau fauna Dayak."
+    fact: "Sasando adalah alat musik petik dawai tradisional dari Pulau Rote, Nusa Tenggara Timur, yang memiliki wadah resonansi terbuat dari anyaman daun lontar."
   },
   {
     id: "tifa",
-    name: "Tifa Papua",
-    image: "/culture/Tifa_Papua_musical_instrument_di…_202607021823.jpeg",
+    name: "Tifa",
+    image: "/culture/Tifa_Papua_musical_instrument_di._202607021823.jpeg",
     province: "Papua",
-    fact: "Tifa Papua adalah gendang tabung kayu khas Papua bermotif ukiran etnik dengan penutup getaran yang terbuat dari kulit biawak kering."
+    fact: "Tifa adalah alat musik pukul sejenis kendang kayu panjang berbalut kulit binatang khas Papua dan Maluku, sering dimainkan untuk tarian upacara adat."
   }
 ];
 
-// Target provinces list for matching
 const TARGET_PROVINCES = [
-  "Aceh", "Sumatera Utara", "Sumatera Barat", "Sumatera Selatan",
-  "DKI Jakarta", "Jawa Barat", "Jawa Tengah", "Nusa Tenggara Timur",
-  "Kalimantan Utara", "Papua"
+  "Jawa Barat",
+  "Nusa Tenggara Timur",
+  "Papua",
+  "Sumatera Barat",
+  "Bali",
+  "Kalimantan Selatan"
 ];
 
-export default function PuzzleGamePage() {
-  const [currentIdx, setCurrentIdx] = useState<number>(0);
-  const [score, setScore] = useState<number>(0);
-  const [lives, setLives] = useState<number>(3);
-  const [gameFinished, setGameFinished] = useState<boolean>(false);
+export default function TebakKerajinanPage() {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [gameFinished, setGameFinished] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [correctFact, setCorrectFact] = useState<string | null>(null);
-  
+
   const currentItem = PUZZLE_ITEMS[currentIdx];
 
-  const handleSelectProvince = (provinceName: string) => {
-    if (feedback === "correct" || gameFinished) return;
+  const handleSelectProvince = (prov: string) => {
+    if (feedback || gameFinished) return; // Wait for continue
+    setSelectedProvince(prov);
 
-    setSelectedProvince(provinceName);
-    
-    if (provinceName === currentItem.province) {
-      setScore((s) => s + 10);
+    if (prov === currentItem.province) {
       setFeedback("correct");
+      setScore((s) => s + 10);
       setCorrectFact(currentItem.fact);
     } else {
-      setLives((l) => Math.max(0, l - 1));
       setFeedback("wrong");
-      
-      // If lives run out
-      if (lives - 1 <= 0) {
-        setTimeout(() => {
-          setGameFinished(true);
-        }, 1200);
-      } else {
-        setTimeout(() => {
-          setFeedback(null);
-          setSelectedProvince(null);
-        }, 1200);
-      }
+      setLives((l) => {
+        const newLives = l - 1;
+        if (newLives <= 0) {
+          setTimeout(() => {
+            setGameFinished(true);
+          }, 1500);
+        }
+        return newLives;
+      });
+
+      // Clear wrong choice feedback after 1.5 seconds to let them try again
+      setTimeout(() => {
+        setFeedback(null);
+        setSelectedProvince(null);
+      }, 1500);
     }
   };
 
   const handleNextStep = () => {
     setFeedback(null);
-    setCorrectFact(null);
     setSelectedProvince(null);
-    
+    setCorrectFact(null);
+
     if (currentIdx < PUZZLE_ITEMS.length - 1) {
       setCurrentIdx((idx) => idx + 1);
     } else {
@@ -143,7 +108,7 @@ export default function PuzzleGamePage() {
     }
   };
 
-  const resetGame = () => {
+  const restartGame = () => {
     setCurrentIdx(0);
     setScore(0);
     setLives(3);
@@ -163,16 +128,16 @@ export default function PuzzleGamePage() {
           <span className="mx-2">/</span>
           <Link href="/mainkan" className="hover:text-amber-500 transition-colors">Mainkan</Link>
           <span className="mx-2">/</span>
-          <span className="text-black dark:text-white">Puzzle Kerajinan Daerah</span>
+          <span className="text-black dark:text-white">Tebak Asal Kerajinan</span>
         </nav>
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-black/10 dark:border-white/10">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
-              🧩 Puzzle Kerajinan Daerah
+              <Map className="text-gold" size={28} /> Tebak Asal Kerajinan
             </h1>
             <p className="text-sm text-black/60 dark:text-white/60 mt-2">
-              Cocokkan kerajinan tradisional yang muncul di sebelah kiri dengan provinsi asal yang tepat di panel kanan.
+              Cocokkan benda seni tradisional yang muncul di sebelah kiri dengan provinsi asal yang tepat di panel kanan.
             </p>
           </div>
           
@@ -185,11 +150,13 @@ export default function PuzzleGamePage() {
             <div className="h-8 w-px bg-black/10 dark:bg-white/10" />
             <div className="text-center">
               <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block">Kesempatan</span>
-              <span className="text-base font-bold flex items-center gap-0.5">
+              <span className="text-base font-bold flex items-center gap-0.5 mt-0.5">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <span key={i} className={i < lives ? "text-red-500" : "text-black/20 dark:text-white/20"}>
-                    ❤️
-                  </span>
+                  <Heart 
+                    key={i} 
+                    size={14} 
+                    className={i < lives ? "text-red-500 fill-red-500" : "text-black/20 dark:text-white/20"} 
+                  />
                 ))}
               </span>
             </div>
@@ -239,9 +206,9 @@ export default function PuzzleGamePage() {
                       exit={{ opacity: 0 }}
                       className="absolute inset-0 bg-red-500/10 backdrop-blur-sm flex flex-col items-center justify-center text-red-500 font-bold uppercase z-20 text-center p-6"
                     >
-                      <span className="text-4xl mb-2">❌</span>
+                      <XCircle size={36} className="text-red-500 mb-2" />
                       <span className="text-lg font-extrabold tracking-wide">Daerah Salah!</span>
-                      <span className="text-[10px] normal-case font-normal text-red-700 dark:text-red-300 mt-2 max-w-xs">
+                      <span className="text-[10px] normal-case font-normal text-red-700 dark:text-red-300 mt-2 max-w-xs leading-relaxed">
                         Kesempatan kamu berkurang satu. Coba cari kaitan sejarah atau bentuk geografisnya!
                       </span>
                     </motion.div>
@@ -249,12 +216,12 @@ export default function PuzzleGamePage() {
                 </AnimatePresence>
               </div>
 
-              {/* Back Button */}
+              {/* Back Link */}
               <Link 
                 href="/mainkan"
                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
               >
-                ← Kembali ke Mainkan
+                <ArrowLeft size={12} /> Kembali ke Mainkan
               </Link>
 
             </div>
@@ -270,9 +237,11 @@ export default function PuzzleGamePage() {
                   className="bg-green-500/5 border border-green-500/20 rounded-3xl p-6 flex flex-col gap-4 text-center md:text-left"
                 >
                   <div className="flex flex-col md:flex-row items-center gap-4">
-                    <span className="text-3xl select-none">🎉</span>
+                    <Sparkles size={32} className="text-green-500 shrink-0" />
                     <div>
-                      <h4 className="text-sm font-bold text-green-600 dark:text-green-400">✨ JAWABAN BENAR!</h4>
+                      <h4 className="text-sm font-bold text-green-600 dark:text-green-400 flex items-center gap-1.5 justify-center md:justify-start">
+                        <CheckCircle2 size={16} /> JAWABAN BENAR!
+                      </h4>
                       <p className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 mt-1">
                         {currentItem.name} berasal dari provinsi <span className="text-black dark:text-white font-extrabold">{currentItem.province}</span>
                       </p>
@@ -285,9 +254,9 @@ export default function PuzzleGamePage() {
 
                   <button
                     onClick={handleNextStep}
-                    className="w-full mt-2 py-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-wider text-xs rounded-xl transition-all shadow-md shadow-green-500/20"
+                    className="w-full mt-2 py-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-wider text-xs rounded-xl transition-all shadow-md shadow-green-500/20 flex items-center justify-center gap-1.5"
                   >
-                    Lanjutkan →
+                    Lanjutkan <ChevronRight size={14} />
                   </button>
                 </motion.div>
               ) : (
@@ -314,8 +283,8 @@ export default function PuzzleGamePage() {
                           }`}
                         >
                           <span>{prov}</span>
-                          {isCorrectChoice && <span>✓</span>}
-                          {isWrongChoice && <span>✗</span>}
+                          {isCorrectChoice && <CheckCircle2 size={14} className="text-green-500" />}
+                          {isWrongChoice && <XCircle size={14} className="text-red-500" />}
                         </button>
                       );
                     })}
@@ -333,12 +302,16 @@ export default function PuzzleGamePage() {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-2xl mx-auto bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8 text-center shadow-xl flex flex-col items-center gap-6"
           >
-            <span className="text-6xl select-none">🏆</span>
+            {lives > 0 ? (
+              <Trophy size={64} className="text-gold animate-bounce" />
+            ) : (
+              <XCircle size={64} className="text-red-500" />
+            )}
             <div>
               <h2 className="text-3xl font-extrabold">Permainan Selesai!</h2>
               <p className="text-sm text-black/50 dark:text-white/50 mt-2">
                 {lives > 0 
-                  ? "Selamat! Kamu berhasil menuntaskan semua kuis puzzle dengan wawasan budayamu yang luar biasa." 
+                  ? "Selamat! Kamu berhasil menuntaskan semua kuis dengan wawasan budayamu yang luar biasa." 
                   : "Sayang sekali kesempatan kamu sudah habis. Jangan berkecil hati, ayo coba lagi untuk belajar!"}
               </p>
             </div>
@@ -351,35 +324,18 @@ export default function PuzzleGamePage() {
               </div>
               <div className="h-10 w-px bg-black/10 dark:bg-white/10" />
               <div>
-                <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block">Skor Akhir</span>
+                <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block">Total Skor</span>
                 <span className="text-2xl font-extrabold text-gold">{score}</span>
               </div>
             </div>
 
-            {/* Quick Edu Summary */}
-            <div className="text-left w-full max-h-60 overflow-y-auto p-4 bg-white/50 dark:bg-black/50 rounded-xl flex flex-col gap-2">
-              <span className="text-[9px] uppercase font-bold text-black/40 dark:text-white/40 block mb-2">Daftar Ringkasan Edukasi:</span>
-              {PUZZLE_ITEMS.map((item, idx) => (
-                <div key={item.id} className="text-xs leading-relaxed border-b border-black/5 dark:border-white/5 pb-2 mb-2 last:border-0 last:pb-0 last:mb-0">
-                  <span className="font-bold text-gold">{item.name}</span> ({item.province}): {item.fact}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-4 w-full mt-4">
-              <Link 
-                href="/mainkan"
-                className="w-1/2 py-3.5 border border-black/10 dark:border-white/10 text-xs font-bold uppercase rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all text-center"
-              >
-                Kembali ke Menu
-              </Link>
-              <button
-                onClick={resetGame}
-                className="w-1/2 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black transition-all shadow-md shadow-black/10"
-              >
-                Coba Lagi
-              </button>
-            </div>
+            {/* Reset CTA */}
+            <button
+              onClick={restartGame}
+              className="px-8 py-3.5 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black transition-all flex items-center gap-2 shadow"
+            >
+              <RefreshCw size={14} /> Main Lagi
+            </button>
           </motion.div>
         )}
 

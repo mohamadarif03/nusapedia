@@ -47,13 +47,13 @@ export default function PlayHubPage() {
           Belajar Budaya Sambil Bermain
         </h1>
         <p className="text-black/60 dark:text-white/60 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
-          Rasakan pengalaman budaya nusantara lewat permainan interaktif - dari memainkan alat musik tradisional hingga menyusun motif batik dan menguji wawasanmu.
+          Rasakan pengalaman budaya nusantara lewat permainan interaktif - dari memainkan alat musik tradisional hingga menebak asal kerajinan nusantara.
         </p>
       </div>
 
       {/* Grid Kartu Game */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-8">
           
           {/* Card 1: Angklung Virtual */}
           <motion.div 
@@ -99,51 +99,7 @@ export default function PlayHubPage() {
             </div>
           </motion.div>
 
-          {/* Card 2: Susun Motif Batik */}
-          <motion.div 
-            whileHover={{ y: -8 }}
-            className="flex flex-col h-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5"
-          >
-            {/* Visual Illustration */}
-            <div className="relative h-44 mb-8 bg-gradient-to-br from-amber-500/10 to-gold/10 rounded-2xl flex items-center justify-center overflow-hidden group">
-              <motion.div 
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
-              >
-                <Palette size={56} strokeWidth={1.5} />
-              </motion.div>
-              {/* Pattern lines grid background */}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(245,158,11,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(245,158,11,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-            </div>
-
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gold mb-2 block">
-              Kerajinan
-            </span>
-            <h3 className="text-2xl font-bold mb-3">Susun Motif Batik</h3>
-            <p className="text-sm text-black/60 dark:text-white/60 leading-relaxed mb-6 flex-grow">
-              Drag dan susun elemen motif batik ke kanvas virtual. Pelajari filosofi di balik tiap pola klasik yang kamu rakit sendiri.
-            </p>
-
-            <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
-              <div className="flex justify-between items-center text-xs">
-                <span className="flex items-center gap-1.5 text-black/50 dark:text-white/50 font-medium">
-                  <Lightbulb size={14} className="text-gold" /> Kreativitas
-                </span>
-                <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 font-bold uppercase rounded-full text-[10px] tracking-wide">
-                  Menengah
-                </span>
-              </div>
-              <Link 
-                href="/mainkan/motif-batik"
-                className="w-full py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black text-center transition-all shadow-md shadow-black/5 dark:shadow-white/5 flex items-center justify-center gap-1.5"
-              >
-                Mainkan <ChevronRight size={14} />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Card 3: Puzzle Kerajinan Daerah */}
+          {/* Card 2: Tebak Asal Kerajinan */}
           <motion.div 
             whileHover={{ y: -8 }}
             className="flex flex-col h-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5"
@@ -164,7 +120,7 @@ export default function PlayHubPage() {
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold mb-2 block">
               Wawasan
             </span>
-            <h3 className="text-2xl font-bold mb-3">Puzzle Kerajinan Daerah</h3>
+            <h3 className="text-2xl font-bold mb-3">Tebak Asal Kerajinan</h3>
             <p className="text-sm text-black/60 dark:text-white/60 leading-relaxed mb-6 flex-grow">
               Cocokkan benda seni tradisional dengan daerah asalnya di peta Indonesia. Uji wawasan dan pengetahuan geografis budayamu.
             </p>
