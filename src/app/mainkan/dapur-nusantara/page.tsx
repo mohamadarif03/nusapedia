@@ -169,16 +169,17 @@ export default function CookingGamePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf7] dark:bg-[#0b0503] text-black dark:text-white pt-36 pb-20 relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-[#140b08] dark:bg-[#070302] text-white pt-36 pb-20 relative overflow-hidden transition-colors duration-500">
       
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.03] dark:opacity-[0.05] pointer-events-none z-0" />
+      {/* Background decoration - subtle bamboo lattice pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#854d0e_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-15 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none z-0" />
 
       {/* Main Container */}
       <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col min-h-[75vh] justify-between">
         
         {/* ================= HEADER GAME ================= */}
-        <header className="flex justify-between items-center bg-white dark:bg-black/60 border border-black/10 dark:border-white/10 p-4 rounded-2xl shadow-sm backdrop-blur-md text-black dark:text-white">
+        <header className="flex justify-between items-center bg-white/5 dark:bg-white/5 border border-white/10 p-4 rounded-2xl shadow-lg backdrop-blur-md text-white">
           {/* Kiri: Nyawa & Skor */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 bg-red-500/10 px-3 py-1.5 rounded-xl border border-red-500/20">
@@ -191,7 +192,7 @@ export default function CookingGamePage() {
               ))}
             </div>
             <div className="text-left">
-              <span className="text-[9px] uppercase tracking-wider text-black/50 dark:text-white/50 block leading-none">Skor</span>
+              <span className="text-[9px] uppercase tracking-wider text-white/50 block leading-none">Skor</span>
               <span className="text-sm font-extrabold text-gold leading-none">{score}</span>
             </div>
           </div>
@@ -203,7 +204,7 @@ export default function CookingGamePage() {
               <span>Step {step} dari 5</span>
             </div>
             {/* Progress Bar Step */}
-            <div className="w-full h-2 bg-black/10 dark:bg-black/40 rounded-full overflow-hidden border border-black/5 dark:border-white/5 p-[1px]">
+            <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden border border-white/5 p-[1px]">
               <div 
                 className="h-full bg-gold rounded-full transition-all duration-500" 
                 style={{ width: `${(step / 5) * 100}%` }}
@@ -214,7 +215,7 @@ export default function CookingGamePage() {
           {/* Kanan: Tombol Pause */}
           <button 
             onClick={() => setIsPaused(!isPaused)}
-            className="p-2.5 bg-black/5 dark:bg-white/5 hover:bg-gold hover:text-black border border-black/10 dark:border-white/10 rounded-xl transition-all"
+            className="p-2.5 bg-white/5 hover:bg-gold hover:text-black border border-white/10 rounded-xl transition-all"
           >
             {isPaused ? <Play size={14} className="fill-current" /> : <Pause size={14} className="fill-current" />}
           </button>
