@@ -13,7 +13,9 @@ import {
   Crop, 
   HelpCircle, 
   Bot,
-  Sparkles
+  Sparkles,
+  Plus,
+  Trash2
 } from "lucide-react";
 
 interface Message {
@@ -22,34 +24,19 @@ interface Message {
   text: string;
 }
 
-// Simple local smart dictionary responder for Indonesian culture
+interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+}
+
+// Simple local smart dictionary responder for Indonesian culture fallback
 const getAIResponse = (query: string): string => {
   const q = query.toLowerCase();
-  
   if (q.includes("parang")) {
     return "Motif Batik Parang adalah salah satu motif batik tertua di Indonesia. Melambangkan ombak samudra yang tidak pernah putus, motif ini membawa filosofi perjuangan tanpa henti, kontinuitas kehidupan, serta kewibawaan dan kekuasaan para kesatria Jawa.";
   }
-  if (q.includes("angklung")) {
-    return "Angklung adalah alat musik tradisional Sunda (Jawa Barat) yang terbuat dari bambu. Angklung diakui oleh UNESCO sejak tahun 2010. Filosofi angklung sangat mendalam: keindahan nadanya hanya tercipta jika dimainkan secara bersama-sama secara harmonis, melambangkan gotong royong dan keselarasan sosial.";
-  }
-  if (q.includes("tulis") || q.includes("cap")) {
-    return "Perbedaan utama Batik Tulis dan Batik Cap terletak pada cara pembuatan dan presisinya:\n- **Batik Tulis**: Dibuat manual menggunakan canting dan lilin (malam). Polanya tidak 100% simetris sempurna karena buatan tangan manusia, warna tembus ke kedua sisi kain secara merata, dan harganya relatif mahal.\n- **Batik Cap**: Dibuat menggunakan stempel tembaga besar yang sudah bermotif. Polanya sangat simetris dan berulang presisi, prosesnya cepat, dan harganya lebih terjangkau.";
-  }
-  if (q.includes("kalimantan")) {
-    return "Kalimantan memiliki kekayaan budaya kerajinan yang luar biasa, di antaranya:\n1. **Kain Sasirangan** khas suku Banjar di Kalimantan Selatan yang dibuat dengan teknik jumputan adat.\n2. **Tenun Ulap Doyo** dari Kalimantan Timur yang terbuat dari serat tanaman daun doyo.\n3. **Kerajinan Anyaman rotan dan manik-manik** suku Dayak.\n4. **Senjata Mandau** dengan ukiran sarung kayu berhiaskan bulu burung enggang.";
-  }
-  if (q.includes("wayang") || q.includes("unesco")) {
-    return "Wayang Kulit diakui oleh UNESCO sebagai Warisan Mahakarya Dunia pada tahun 2003 karena memiliki kedalaman seni tutur cerita (storytelling) yang tinggi, keindahan kriya tatah kulit, serta nilai filosofis moral spiritual yang kuat yang memadukan kebaikan (kanan) dan keburukan (kiri) dalam lakon kehidupan.";
-  }
-  if (q.includes("sulawesi")) {
-    return "Sulawesi kaya akan beragam kuliner khas yang lezat:\n1. **Coto Makassar** (Sulawesi Selatan): Sup daging dan jeroan kaya rempah dengan campuran kuah kacang.\n2. **Tinutuan / Bubur Manado** (Sulawesi Utara): Bubur sayur sehat dari labu kuning, jagung, bayam, dan kemangi.\n3. **Kaledo** (Sulawesi Tengah): Sup tulang kaki sapi berkuah asam pedas gurih.\n4. **Gohu Ikan** (Maluku Utara/Sulawesi): Sashimi khas timur berbumbu kenari jeruk nipis segar.";
-  }
-  if (q.includes("halo") || q.includes("hai") || q.includes("pagi") || q.includes("siang") || q.includes("sore")) {
-    return "Halo! Ada yang bisa saya bantu seputar kekayaan budaya Nusantara hari ini? Silakan ajukan pertanyaan Anda!";
-  }
-
-  // Fallback response
-  return "Pertanyaan yang sangat menarik! Kekayaan budaya Nusantara memang sangat luas dan mendalam. Sebagai Asisten Budaya AI, saya merekomendasikan Anda menjelajahi data budaya di menu utama kita, atau spesifikasi pertanyaan Anda ke tema batik, alat musik, kerajinan daerah, maupun kuliner nusantara.";
+  return "Pertanyaan yang menarik! Sebagai Asisten Budaya AI, silakan periksa koneksi API Anda.";
 };
 
 // Mock recognition models for batik recognition
@@ -71,7 +58,7 @@ const MOCK_ANALYSES: Record<string, BatikAnalysisResult> = {
       "Garis melengkung yang simetris dan berulang secara diagonal."
     ],
     region: "DI Yogyakarta / Jawa Tengah",
-    slug: "batik-parang" // redirect to gallery
+    slug: "batik-parang"
   },
   parang: {
     motifName: "Motif Parang",
@@ -164,14 +151,9 @@ const parseMarkdown = (text: string) => {
 export default function TanyaAIPage() {
   const [activeTab, setActiveTab] = useState<"chatbot" | "batik">("chatbot");
   
-  // Chatbot State
-  const [chatMessages, setChatMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      sender: "ai",
-      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
-    }
-  ]);
+  // Chatbot Sessions State
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string>("");
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
@@ -183,34 +165,99 @@ export default function TanyaAIPage() {
   const [analysisResult, setAnalysisResult] = useState<BatikAnalysisResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Initialize and load sessions from LocalStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("culture_verse_chat_sessions");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved) as ChatSession[];
+        if (parsed.length > 0) {
+          setSessions(parsed);
+          setActiveSessionId(parsed[0].id);
+          return;
+        }
+      } catch (e) {
+        console.error("Failed to parse saved chat sessions", e);
+      }
+    }
+    
+    // Default initial session if none found
+    const defaultWelcome = {
+      id: "welcome",
+      sender: "ai" as const,
+      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+    };
+    const defaultSession: ChatSession = {
+      id: `session_${Date.now()}`,
+      title: "Percakapan Baru",
+      messages: [defaultWelcome]
+    };
+    setSessions([defaultSession]);
+    setActiveSessionId(defaultSession.id);
+  }, []);
+
+  // Save sessions to LocalStorage on change
+  useEffect(() => {
+    if (sessions.length > 0) {
+      localStorage.setItem("culture_verse_chat_sessions", JSON.stringify(sessions));
+    }
+  }, [sessions]);
+
+  // Find active session
+  const activeSession = sessions.find((s) => s.id === activeSessionId) || sessions[0];
+  const chatMessages = activeSession ? activeSession.messages : [];
+
   // Scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isTyping]);
 
-  // Load chat history from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("culture_verse_chat_history");
-    if (saved) {
-      try {
-        setChatMessages(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse saved chat history", e);
+  // Create new chat session
+  const handleNewSession = () => {
+    const defaultWelcome = {
+      id: `welcome_${Date.now()}`,
+      sender: "ai" as const,
+      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+    };
+    const newSession: ChatSession = {
+      id: `session_${Date.now()}`,
+      title: "Percakapan Baru",
+      messages: [defaultWelcome]
+    };
+    setSessions((prev) => [newSession, ...prev]);
+    setActiveSessionId(newSession.id);
+  };
+
+  // Delete specific session
+  const handleDeleteSession = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm("Apakah Anda yakin ingin menghapus percakapan ini?")) {
+      const filtered = sessions.filter((s) => s.id !== id);
+      if (filtered.length === 0) {
+        const defaultWelcome = {
+          id: `welcome_${Date.now()}`,
+          sender: "ai" as const,
+          text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+        };
+        const cleanSession: ChatSession = {
+          id: `session_${Date.now()}`,
+          title: "Percakapan Baru",
+          messages: [defaultWelcome]
+        };
+        setSessions([cleanSession]);
+        setActiveSessionId(cleanSession.id);
+      } else {
+        setSessions(filtered);
+        if (activeSessionId === id) {
+          setActiveSessionId(filtered[0].id);
+        }
       }
     }
-  }, []);
-
-  // Save chat history to localStorage when changed
-  useEffect(() => {
-    if (chatMessages.length === 1 && chatMessages[0].id === "welcome") {
-      return;
-    }
-    localStorage.setItem("culture_verse_chat_history", JSON.stringify(chatMessages));
-  }, [chatMessages]);
+  };
 
   // Chat Submission Handler
   const handleSendChat = async (textToSend: string) => {
-    if (!textToSend.trim()) return;
+    if (!textToSend.trim() || !activeSessionId) return;
 
     // Add user message
     const userMsg: Message = {
@@ -218,10 +265,25 @@ export default function TanyaAIPage() {
       sender: "user",
       text: textToSend
     };
-    setChatMessages((prev) => [...prev, userMsg]);
-    setInputText("");
 
-    // Trigger typing simulation
+    // Update active session messages & dynamic title if it's the first message
+    setSessions((prev) => {
+      return prev.map((s) => {
+        if (s.id === activeSessionId) {
+          const newTitle = s.title === "Percakapan Baru"
+            ? textToSend.length > 20 ? `${textToSend.substring(0, 20)}...` : textToSend
+            : s.title;
+          return {
+            ...s,
+            title: newTitle,
+            messages: [...s.messages, userMsg]
+          };
+        }
+        return s;
+      });
+    });
+
+    setInputText("");
     setIsTyping(true);
 
     try {
@@ -234,21 +296,24 @@ export default function TanyaAIPage() {
       const data = await response.json();
       setIsTyping(false);
 
-      if (data.error) {
-        const errorMsg: Message = {
-          id: `ai_${Date.now()}`,
-          sender: "ai",
-          text: `Maaf, terjadi kesalahan: ${data.error}`
-        };
-        setChatMessages((prev) => [...prev, errorMsg]);
-      } else {
-        const aiMsg: Message = {
-          id: `ai_${Date.now()}`,
-          sender: "ai",
-          text: data.text
-        };
-        setChatMessages((prev) => [...prev, aiMsg]);
-      }
+      const aiText = data.error ? `Maaf, terjadi kesalahan: ${data.error}` : data.text;
+      const aiMsg: Message = {
+        id: `ai_${Date.now()}`,
+        sender: "ai",
+        text: aiText
+      };
+
+      setSessions((prev) => {
+        return prev.map((s) => {
+          if (s.id === activeSessionId) {
+            return {
+              ...s,
+              messages: [...s.messages, aiMsg]
+            };
+          }
+          return s;
+        });
+      });
     } catch (err: any) {
       setIsTyping(false);
       const errorMsg: Message = {
@@ -256,7 +321,17 @@ export default function TanyaAIPage() {
         sender: "ai",
         text: `Gagal terhubung ke AI. Silakan periksa koneksi Anda.`
       };
-      setChatMessages((prev) => [...prev, errorMsg]);
+      setSessions((prev) => {
+        return prev.map((s) => {
+          if (s.id === activeSessionId) {
+            return {
+              ...s,
+              messages: [...s.messages, errorMsg]
+            };
+          }
+          return s;
+        });
+      });
     }
   };
 
@@ -320,13 +395,11 @@ export default function TanyaAIPage() {
           alert(`Analisis gagal: ${data.error}`);
         } else {
           try {
-            // The response should be a raw JSON string
             const cleanedText = data.text.trim();
             const result: BatikAnalysisResult = JSON.parse(cleanedText);
             setAnalysisResult(result);
           } catch (jsonErr) {
             console.error("Failed to parse JSON response from Gemini:", data.text);
-            // Fallback mock if JSON parsing fails due to AI outputting text formatting
             const keys = Object.keys(MOCK_ANALYSES);
             const randomKey = keys[Math.floor(Math.random() * keys.length)];
             setAnalysisResult(MOCK_ANALYSES[randomKey]);
@@ -398,40 +471,82 @@ export default function TanyaAIPage() {
         {activeTab === "chatbot" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
-            {/* Left Column: Suggestions */}
+            {/* Left Column: Sidebar History Sessions */}
             <div className="lg:col-span-4 flex flex-col gap-6">
-              <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-3xl flex flex-col h-full justify-between">
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-black/50 dark:text-white/50 mb-4">
-                    Coba Tanyakan...
-                  </h3>
-                  <div className="flex flex-col gap-3">
-                    {[
-                      "Apa makna motif batik parang?",
-                      "Darimana asal usul angklung?",
-                      "Apa perbedaan batik tulis dan batik cap?",
-                      "Kerajinan khas apa yang berasal dari Kalimantan?",
-                      "Mengapa wayang diakui UNESCO?",
-                      "Apa saja kuliner khas Sulawesi?"
-                    ].map((query) => (
-                      <button
-                        key={query}
-                        onClick={() => handleSuggestionClick(query)}
-                        className="w-full p-3 bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:border-gold dark:hover:border-gold hover:text-gold dark:hover:text-gold rounded-xl text-left text-xs font-medium leading-relaxed transition-all transform active:scale-98"
+              
+              {/* New Conversation Button */}
+              <button
+                onClick={handleNewSession}
+                className="w-full py-3.5 px-4 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black flex items-center justify-center gap-2"
+              >
+                <Plus size={16} />
+                Percakapan Baru
+              </button>
+
+              {/* Sessions List */}
+              <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-5 rounded-3xl flex-grow flex flex-col min-h-[350px]">
+                <h3 className="text-[10px] font-bold uppercase tracking-wider text-black/45 dark:text-white/45 mb-3">
+                  Riwayat Percakapan
+                </h3>
+                
+                <div className="flex flex-col gap-2 max-h-[220px] overflow-y-auto pr-1">
+                  {sessions.map((s) => {
+                    const isActive = s.id === activeSessionId;
+                    return (
+                      <div
+                        key={s.id}
+                        onClick={() => setActiveSessionId(s.id)}
+                        className={`w-full p-3 rounded-xl text-left text-xs font-semibold leading-relaxed transition-all cursor-pointer flex justify-between items-center group border ${
+                          isActive 
+                            ? "bg-gold border-gold text-black shadow-md"
+                            : "bg-white dark:bg-black hover:border-gold dark:hover:border-gold border-black/5 dark:border-white/5 text-black dark:text-white"
+                        }`}
                       >
-                        {query}
-                      </button>
-                    ))}
-                  </div>
+                        <span className="truncate max-w-[80%]">{s.title}</span>
+                        <button
+                          onClick={(e) => handleDeleteSession(s.id, e)}
+                          className={`opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500 rounded transition-all text-red-500 hover:text-white ${
+                            isActive ? "text-black/70 hover:bg-black/10 hover:text-black" : ""
+                          }`}
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-black/10 dark:border-white/10 flex gap-3 items-start text-[10px] text-black/45 dark:text-white/45 leading-relaxed">
-                  <AlertCircle size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                  <p>
-                    Jawaban dihasilkan oleh AI dan bersifat edukatif. Selalu verifikasi ke sumber terpercaya untuk informasi lebih lanjut.
-                  </p>
+                <div className="h-px bg-black/10 dark:bg-white/10 my-4" />
+
+                {/* Question suggestions */}
+                <h3 className="text-[10px] font-bold uppercase tracking-wider text-black/45 dark:text-white/45 mb-3">
+                  Contoh Topik Tanya
+                </h3>
+                <div className="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                  {[
+                    "Apa makna motif batik parang?",
+                    "Darimana asal usul angklung?",
+                    "Apa perbedaan batik tulis dan batik cap?",
+                    "Kerajinan khas Kalimantan?",
+                    "Mengapa wayang diakui UNESCO?",
+                    "Kuliner khas Sulawesi?"
+                  ].map((query) => (
+                    <button
+                      key={query}
+                      onClick={() => handleSuggestionClick(query)}
+                      className="w-full p-2 bg-white/40 dark:bg-black/40 border border-black/5 dark:border-white/5 hover:border-gold dark:hover:border-gold rounded-lg text-left text-[10px] text-black/70 dark:text-white/70 truncate transition-all"
+                    >
+                      {query}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-auto pt-4 flex gap-2 items-start text-[9px] text-black/45 dark:text-white/45 leading-relaxed">
+                  <AlertCircle size={12} className="text-amber-500 shrink-0 mt-0.5" />
+                  <p>Jawaban dihasilkan oleh AI. Verifikasi untuk keaslian sejarah.</p>
                 </div>
               </div>
+
             </div>
 
             {/* Right Column: Chat Box Area */}
@@ -442,28 +557,11 @@ export default function TanyaAIPage() {
                 <div className="flex justify-between items-center px-6 py-4 border-b border-black/10 dark:border-white/10">
                   <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-black/75 dark:text-white/75">Nusara Online</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-black/75 dark:text-white/75">
+                      {activeSession?.title || "Nusara Online"}
+                    </span>
                   </div>
-                  {chatMessages.length > 1 && (
-                    <button
-                      onClick={() => {
-                        if (confirm("Apakah Anda yakin ingin menghapus semua riwayat percakapan?")) {
-                          const defaultMsg = [
-                            {
-                              id: "welcome",
-                              sender: "ai" as const,
-                              text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
-                            }
-                          ];
-                          setChatMessages(defaultMsg);
-                          localStorage.setItem("culture_verse_chat_history", JSON.stringify(defaultMsg));
-                        }
-                      }}
-                      className="text-[10px] font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors"
-                    >
-                      Hapus Riwayat
-                    </button>
-                  )}
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-55">Nusara Chat</span>
                 </div>
                 
                 {/* Chat Feed */}
@@ -596,7 +694,7 @@ export default function TanyaAIPage() {
                 <button
                   onClick={runBatikAnalysis}
                   disabled={!selectedImage || isAnalyzing}
-                  className="w-full mt-6 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow disabled:opacity-30 disabled:pointer-events-none hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black animate-none"
+                  className="w-full mt-6 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow disabled:opacity-30 disabled:pointer-events-none hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black"
                 >
                   {isAnalyzing ? "AI sedang menganalisis motif..." : "Analisis Motif →"}
                 </button>
