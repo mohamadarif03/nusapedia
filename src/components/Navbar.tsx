@@ -23,10 +23,6 @@ export default function Navbar() {
     { name: "Tanya AI", href: "/tanya-ai" },
   ];
 
-  if (pathname.startsWith("/mainkan/dapur-nusantara")) {
-    return null;
-  }
-
   return (
     <header className="fixed top-0 w-full z-[100] transition-all duration-300 bg-white/20 dark:bg-black/20 backdrop-blur-md border-b border-black/5 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">

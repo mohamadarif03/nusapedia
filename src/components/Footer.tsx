@@ -6,10 +6,6 @@ import { usePathname } from "next/navigation";
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/mainkan/dapur-nusantara")) {
-    return null;
-  }
-
   return (
     <footer className="relative bg-[#fff8f0] dark:bg-[#0d0804] text-black dark:text-white pt-20 pb-8 overflow-hidden transition-colors duration-300">
       {/* Decorative top border - thin subtle pattern */}
