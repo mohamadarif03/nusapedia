@@ -63,22 +63,6 @@ export default function CultureDetailClient({ culture, relatedCultures }: Props)
               </AnimatePresence>
             </motion.div>
 
-            {/* Thumbnails */}
-            {culture.thumbnails && culture.thumbnails.length > 1 && (
-              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                {culture.thumbnails.map((thumb, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => setActiveImage(thumb)}
-                    className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-300 ${
-                      activeImage === thumb ? "ring-2 ring-gold ring-offset-2 dark:ring-offset-black" : "opacity-60 hover:opacity-100"
-                    }`}
-                  >
-                    <Image src={thumb} alt={`Thumbnail ${idx+1}`} fill className="object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Right Column: Info (60%) */}
@@ -130,7 +114,7 @@ export default function CultureDetailClient({ culture, relatedCultures }: Props)
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
-                  className="text-black/70 dark:text-white/70 leading-relaxed space-y-4"
+                  className="text-black/70 dark:text-white/70 leading-relaxed space-y-4 whitespace-pre-line"
                 >
                   {tabs.find(t => t.id === activeTab)?.content}
                 </motion.div>

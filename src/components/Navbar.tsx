@@ -27,8 +27,10 @@ export default function Navbar() {
     <header className="fixed top-0 w-full z-[100] transition-all duration-300 bg-white/20 dark:bg-black/20 backdrop-blur-md border-b border-black/5 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-xl font-medium tracking-widest text-black dark:text-white group-hover:text-amber-500 dark:group-hover:text-gold transition-colors">
-            CULTURE<span className="font-light text-black/50 dark:text-white/50">VERSE</span>
+          <img src="/logo.png" alt="NUSAPEDIA Logo" className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110" />
+          <span className="text-xl font-medium tracking-widest font-outfit">
+            <span className="text-[#4E3325] dark:text-[#f4eae4] transition-colors">NUSA</span>
+            <span className="font-light text-[#C99A2E]">PEDIA</span>
           </span>
         </Link>
         

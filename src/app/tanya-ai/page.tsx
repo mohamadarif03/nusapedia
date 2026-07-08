@@ -169,7 +169,7 @@ export default function TanyaAIPage() {
 
   // Initialize and load sessions from LocalStorage
   useEffect(() => {
-    const saved = localStorage.getItem("culture_verse_chat_sessions");
+    const saved = localStorage.getItem("nusapedia_chat_sessions");
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as ChatSession[];
@@ -187,7 +187,7 @@ export default function TanyaAIPage() {
     const defaultWelcome = {
       id: "welcome",
       sender: "ai" as const,
-      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+      text: "Halo! Saya Nusara, asisten budaya digital dari platform NUSAPEDIA 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
     };
     const defaultSession: ChatSession = {
       id: `session_${Date.now()}`,
@@ -201,7 +201,7 @@ export default function TanyaAIPage() {
   // Save sessions to LocalStorage on change
   useEffect(() => {
     if (sessions.length > 0) {
-      localStorage.setItem("culture_verse_chat_sessions", JSON.stringify(sessions));
+      localStorage.setItem("nusapedia_chat_sessions", JSON.stringify(sessions));
     }
   }, [sessions]);
 
@@ -219,7 +219,7 @@ export default function TanyaAIPage() {
     const defaultWelcome = {
       id: `welcome_${Date.now()}`,
       sender: "ai" as const,
-      text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+      text: "Halo! Saya Nusara, asisten budaya digital dari platform NUSAPEDIA 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
     };
     const newSession: ChatSession = {
       id: `session_${Date.now()}`,
@@ -239,7 +239,7 @@ export default function TanyaAIPage() {
         const defaultWelcome = {
           id: `welcome_${Date.now()}`,
           sender: "ai" as const,
-          text: "Halo! Saya Nusara, asisten budaya digital dari platform Culture Verse 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
+          text: "Halo! Saya Nusara, asisten budaya digital dari platform NUSAPEDIA 👋 Tanyakan apa saja seputar kekayaan budaya Nusantara, saya siap membantu!"
         };
         const cleanSession: ChatSession = {
           id: `session_${Date.now()}`,

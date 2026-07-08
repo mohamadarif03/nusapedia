@@ -60,16 +60,20 @@ export default function PlayHubPage() {
             className="flex flex-col h-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5"
           >
             {/* Visual Illustration */}
-            <div className="relative h-44 mb-8 bg-gradient-to-br from-amber-500/10 to-gold/10 rounded-2xl flex items-center justify-center overflow-hidden group">
+            <div className="relative h-44 mb-8 rounded-2xl flex items-center justify-center overflow-hidden group">
+              <img 
+                src="/game/Bamboo_angklung_with_musical_notes_202607081941.jpeg" 
+                alt="Angklung Virtual"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
               <motion.div 
                 animate={{ rotate: [0, -3, 3, -3, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
+                className="relative z-10 filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-white"
               >
-                <Music size={56} strokeWidth={1.5} />
+                <Music size={44} strokeWidth={1.5} />
               </motion.div>
-              {/* Subtle background waves */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.05)_0%,transparent_70%)] pointer-events-none" />
             </div>
 
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold mb-2 block">
@@ -104,16 +108,20 @@ export default function PlayHubPage() {
             className="flex flex-col h-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5"
           >
             {/* Visual Illustration */}
-            <div className="relative h-44 mb-8 bg-gradient-to-br from-amber-500/10 to-gold/10 rounded-2xl flex items-center justify-center overflow-hidden group">
+            <div className="relative h-44 mb-8 rounded-2xl flex items-center justify-center overflow-hidden group">
+              <img 
+                src="/game/A_colorful_educational_adventure_game_202607081942.jpeg" 
+                alt="Tebak Asal Kerajinan"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
               <motion.div 
                 animate={{ y: [0, -4, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-gold"
+                className="relative z-10 filter drop-shadow-md select-none group-hover:scale-110 transition-transform duration-300 text-white"
               >
-                <Map size={56} strokeWidth={1.5} />
+                <Map size={44} strokeWidth={1.5} />
               </motion.div>
-              {/* Map grid background */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.03)_0%,transparent_70%)] pointer-events-none" />
             </div>
 
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold mb-2 block">

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Map, 
@@ -15,6 +14,7 @@ import {
   ChevronRight,
   RefreshCw
 } from "lucide-react";
+import { cultures } from "@/data/cultures";
 
 interface PuzzleItem {
   id: string;
@@ -24,40 +24,8 @@ interface PuzzleItem {
   fact: string;
 }
 
-const PUZZLE_ITEMS: PuzzleItem[] = [
-  {
-    id: "wayang",
-    name: "Wayang Golek",
-    image: "/culture/Miniature_Ondel-ondel_puppets_di._202607021738.jpeg", // Using Ondel-ondel as proxy if no wayang, or we can use local images
-    province: "Jawa Barat",
-    fact: "Wayang Golek merupakan seni pertunjukan boneka kayu khas Sunda Jawa Barat, yang cerita lakon utamanya bersumber dari kisah Ramayana dan Mahabarata."
-  },
-  {
-    id: "sasando",
-    name: "Sasando",
-    image: "/culture/Sasando_musical_instrument_displ._202607021745.jpeg",
-    province: "Nusa Tenggara Timur",
-    fact: "Sasando adalah alat musik petik dawai tradisional dari Pulau Rote, Nusa Tenggara Timur, yang memiliki wadah resonansi terbuat dari anyaman daun lontar."
-  },
-  {
-    id: "tifa",
-    name: "Tifa",
-    image: "/culture/Tifa_Papua_musical_instrument_di._202607021823.jpeg",
-    province: "Papua",
-    fact: "Tifa adalah alat musik pukul sejenis kendang kayu panjang berbalut kulit binatang khas Papua dan Maluku, sering dimainkan untuk tarian upacara adat."
-  }
-];
-
-const TARGET_PROVINCES = [
-  "Jawa Barat",
-  "Nusa Tenggara Timur",
-  "Papua",
-  "Sumatera Barat",
-  "Bali",
-  "Kalimantan Selatan"
-];
-
 export default function TebakKerajinanPage() {
+  const [questions, setQuestions] = useState<PuzzleItem[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
@@ -65,17 +33,80 @@ export default function TebakKerajinanPage() {
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [correctFact, setCorrectFact] = useState<string | null>(null);
+  const [options, setOptions] = useState<string[]>([]);
+  const [highScore, setHighScore] = useState(0);
 
-  const currentItem = PUZZLE_ITEMS[currentIdx];
+  // Helper to shuffle array
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  // Extract all unique provinces from data
+  const allProvinces = Array.from(new Set(cultures.map((c) => c.province)));
+
+  // Generate dynamic multiple choice options (1 correct + 5 random distractors)
+  const generateOptions = (correctProvince: string) => {
+    const distractors = allProvinces.filter((p) => p !== correctProvince);
+    const shuffledDistractors = shuffleArray(distractors);
+    const selectedDistractors = shuffledDistractors.slice(0, 5);
+    const rawOptions = [correctProvince, ...selectedDistractors];
+    return shuffleArray(rawOptions);
+  };
+
+  // Initialize the game
+  useEffect(() => {
+    const ALL_ITEMS: PuzzleItem[] = cultures.map((c) => ({
+      id: c.id,
+      name: c.name,
+      image: c.image,
+      province: c.province,
+      fact: c.description
+    }));
+
+    const shuffled = shuffleArray(ALL_ITEMS);
+    setQuestions(shuffled);
+    if (shuffled.length > 0) {
+      setOptions(generateOptions(shuffled[0].province));
+    }
+
+    const saved = localStorage.getItem("tebak_asal_highscore");
+    if (saved) {
+      setHighScore(parseInt(saved, 10));
+    }
+  }, []);
+
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex items-center justify-center pt-32">
+        <div className="text-center">
+          <RefreshCw className="animate-spin text-gold mx-auto mb-4" size={32} />
+          <p className="text-sm font-medium">Menyiapkan Kuis Kebudayaan...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentItem = questions[currentIdx];
 
   const handleSelectProvince = (prov: string) => {
-    if (feedback || gameFinished) return; // Wait for continue
+    if (feedback || gameFinished) return;
     setSelectedProvince(prov);
 
     if (prov === currentItem.province) {
       setFeedback("correct");
-      setScore((s) => s + 10);
+      const newScore = score + 10;
+      setScore(newScore);
       setCorrectFact(currentItem.fact);
+
+      if (newScore > highScore) {
+        setHighScore(newScore);
+        localStorage.setItem("tebak_asal_highscore", newScore.toString());
+      }
     } else {
       setFeedback("wrong");
       setLives((l) => {
@@ -88,7 +119,7 @@ export default function TebakKerajinanPage() {
         return newLives;
       });
 
-      // Clear wrong choice feedback after 1.5 seconds to let them try again
+      // Reset selection after a short delay so they can try again if lives remain
       setTimeout(() => {
         setFeedback(null);
         setSelectedProvince(null);
@@ -101,14 +132,26 @@ export default function TebakKerajinanPage() {
     setSelectedProvince(null);
     setCorrectFact(null);
 
-    if (currentIdx < PUZZLE_ITEMS.length - 1) {
-      setCurrentIdx((idx) => idx + 1);
+    if (currentIdx < questions.length - 1) {
+      const nextIdx = currentIdx + 1;
+      setCurrentIdx(nextIdx);
+      setOptions(generateOptions(questions[nextIdx].province));
     } else {
       setGameFinished(true);
     }
   };
 
   const restartGame = () => {
+    const ALL_ITEMS: PuzzleItem[] = cultures.map((c) => ({
+      id: c.id,
+      name: c.name,
+      image: c.image,
+      province: c.province,
+      fact: c.description
+    }));
+
+    const shuffled = shuffleArray(ALL_ITEMS);
+    setQuestions(shuffled);
     setCurrentIdx(0);
     setScore(0);
     setLives(3);
@@ -116,6 +159,9 @@ export default function TebakKerajinanPage() {
     setSelectedProvince(null);
     setFeedback(null);
     setCorrectFact(null);
+    if (shuffled.length > 0) {
+      setOptions(generateOptions(shuffled[0].province));
+    }
   };
 
   return (
@@ -134,10 +180,10 @@ export default function TebakKerajinanPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-black/10 dark:border-white/10">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
-              <Map className="text-gold" size={28} /> Tebak Asal Kerajinan
+              <Map className="text-gold" size={28} /> Tebak Asal Kebudayaan
             </h1>
             <p className="text-sm text-black/60 dark:text-white/60 mt-2">
-              Cocokkan benda seni tradisional yang muncul di sebelah kiri dengan provinsi asal yang tepat di panel kanan.
+              Uji wawasan Anda dengan menebak asal provinsi dari berbagai mahakarya seni, kuliner, dan kriya tradisional Nusantara.
             </p>
           </div>
           
@@ -147,15 +193,20 @@ export default function TebakKerajinanPage() {
               <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block">Skor</span>
               <span className="text-base font-extrabold text-gold">{score}</span>
             </div>
-            <div className="h-8 w-px bg-black/10 dark:bg-white/10" />
+            <div className="h-8 w-px bg-black/10 dark:border-white/10" />
             <div className="text-center">
-              <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block">Kesempatan</span>
+              <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block">Highscore</span>
+              <span className="text-base font-extrabold text-amber-600 dark:text-amber-400">{highScore}</span>
+            </div>
+            <div className="h-8 w-px bg-black/10 dark:border-white/10" />
+            <div className="text-center">
+              <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block">Nyawa</span>
               <span className="text-base font-bold flex items-center gap-0.5 mt-0.5">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <Heart 
                     key={i} 
                     size={14} 
-                    className={i < lives ? "text-red-500 fill-red-500" : "text-black/20 dark:text-white/20"} 
+                    className={i < lives ? "text-red-500 fill-red-500 animate-pulse" : "text-black/20 dark:text-white/20"} 
                   />
                 ))}
               </span>
@@ -176,23 +227,20 @@ export default function TebakKerajinanPage() {
               <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-3xl relative overflow-hidden">
                 <div className="text-center mb-6">
                   <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block mb-1">
-                    Item Ke-{currentIdx + 1} dari {PUZZLE_ITEMS.length}
+                    Soal Ke-{currentIdx + 1} dari {questions.length}
                   </span>
                   <h3 className="text-xl font-bold">Tebak Asal Daerah</h3>
                 </div>
 
                 {/* Main Card */}
                 <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 bg-black/10 dark:bg-white/10 shadow-lg">
-                  <Image 
+                  <img 
                     src={currentItem.image}
                     alt={currentItem.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                    priority
+                    className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/85 via-black/40 to-transparent z-10">
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-gold mb-1 block">Benda Seni</span>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-gold mb-1 block">Nama Karya</span>
                     <h4 className="text-2xl font-bold text-white">{currentItem.name}</h4>
                   </div>
                 </div>
@@ -204,12 +252,12 @@ export default function TebakKerajinanPage() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 bg-red-500/10 backdrop-blur-sm flex flex-col items-center justify-center text-red-500 font-bold uppercase z-20 text-center p-6"
+                      className="absolute inset-0 bg-red-500/15 backdrop-blur-sm flex flex-col items-center justify-center text-red-500 font-bold uppercase z-20 text-center p-6"
                     >
-                      <XCircle size={36} className="text-red-500 mb-2" />
-                      <span className="text-lg font-extrabold tracking-wide">Daerah Salah!</span>
-                      <span className="text-[10px] normal-case font-normal text-red-700 dark:text-red-300 mt-2 max-w-xs leading-relaxed">
-                        Kesempatan kamu berkurang satu. Coba cari kaitan sejarah atau bentuk geografisnya!
+                      <XCircle size={48} className="text-red-500 mb-2 animate-bounce" />
+                      <span className="text-xl font-extrabold tracking-wide">Pilihan Salah!</span>
+                      <span className="text-xs normal-case font-normal text-red-700 dark:text-red-300 mt-2 max-w-xs leading-relaxed">
+                        Sayang sekali, itu bukan asal provinsi yang tepat. Nyawa Anda berkurang 1. Coba lagi!
                       </span>
                     </motion.div>
                   )}
@@ -266,7 +314,7 @@ export default function TebakKerajinanPage() {
                   </h3>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {TARGET_PROVINCES.map((prov) => {
+                    {options.map((prov) => {
                       const isWrongChoice = selectedProvince === prov && feedback === "wrong";
                       const isCorrectChoice = selectedProvince === prov && feedback === "correct";
 
@@ -305,14 +353,14 @@ export default function TebakKerajinanPage() {
             {lives > 0 ? (
               <Trophy size={64} className="text-gold animate-bounce" />
             ) : (
-              <XCircle size={64} className="text-red-500" />
+              <XCircle size={64} className="text-red-500 animate-pulse" />
             )}
             <div>
               <h2 className="text-3xl font-extrabold">Permainan Selesai!</h2>
               <p className="text-sm text-black/50 dark:text-white/50 mt-2">
                 {lives > 0 
-                  ? "Selamat! Kamu berhasil menuntaskan semua kuis dengan wawasan budayamu yang luar biasa." 
-                  : "Sayang sekali kesempatan kamu sudah habis. Jangan berkecil hati, ayo coba lagi untuk belajar!"}
+                  ? `Luar biasa! Anda berhasil menebak semua ${questions.length} kebudayaan tanpa kalah! Anda adalah Empu Kebudayaan Nusantara sejati.` 
+                  : "Sayang sekali nyawa Anda sudah habis. Jangan menyerah, mari asah wawasan Anda dan coba lagi!"}
               </p>
             </div>
 
@@ -320,12 +368,17 @@ export default function TebakKerajinanPage() {
             <div className="w-full bg-white dark:bg-black border border-black/10 dark:border-white/10 p-6 rounded-2xl flex justify-around items-center">
               <div>
                 <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block">Tebakan Benar</span>
-                <span className="text-2xl font-extrabold text-gold">{score / 10} / {PUZZLE_ITEMS.length}</span>
+                <span className="text-2xl font-extrabold text-gold">{score / 10} / {questions.length}</span>
               </div>
               <div className="h-10 w-px bg-black/10 dark:bg-white/10" />
               <div>
                 <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block">Total Skor</span>
                 <span className="text-2xl font-extrabold text-gold">{score}</span>
+              </div>
+              <div className="h-10 w-px bg-black/10 dark:bg-white/10" />
+              <div>
+                <span className="text-[10px] uppercase font-bold text-black/40 dark:text-white/40 block">Highscore</span>
+                <span className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{highScore}</span>
               </div>
             </div>
 

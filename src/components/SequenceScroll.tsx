@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "motion/react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 const DEFAULT_FRAME_COUNT = 60;
 
@@ -291,9 +292,11 @@ export default function SequenceScroll() {
             <p className="text-lg md:text-2xl text-black/70 dark:text-white/80 max-w-2xl mx-auto mb-10 font-light drop-shadow dark:drop-shadow-lg transition-colors duration-300">
               Sebuah simfoni visual dari keberagaman dan kekayaan tradisi yang hidup di setiap sudut kepulauan Indonesia.
             </p>
-            <button className="px-8 py-4 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 border border-black/10 dark:border-white/20 backdrop-blur-md rounded-full text-black dark:text-white font-medium transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.1)] dark:shadow-[0_0_30px_rgba(251,191,36,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.2)] dark:hover:shadow-[0_0_40px_rgba(251,191,36,0.3)]">
-              Mulai Penjelajahan
-            </button>
+            <Link href="/jelajahi">
+              <button className="px-8 py-4 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 border border-black/10 dark:border-white/20 backdrop-blur-md rounded-full text-black dark:text-white font-medium transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.1)] dark:shadow-[0_0_30px_rgba(251,191,36,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.2)] dark:hover:shadow-[0_0_40px_rgba(251,191,36,0.3)]">
+                Mulai Penjelajahan
+              </button>
+            </Link>
           </div>
         </motion.div>
       </div>

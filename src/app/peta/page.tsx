@@ -1,16 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import IndonesiaMap from "@/components/IndonesiaMap";
 import ProvinceSidePanel from "@/components/ProvinceSidePanel";
 import UnescoTimeline from "@/components/UnescoTimeline";
 import { cultures } from "@/data/cultures";
+import { MapPin } from "lucide-react";
 
 export default function PetaPage() {
   const [activeProvince, setActiveProvince] = useState<string | null>(null);
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [stampedProvinces, setStampedProvinces] = useState<string[]>([]);
+  const [newStampAnimProvince, setNewStampAnimProvince] = useState<string | null>(null);
+  const dashboardRef = useRef<HTMLDivElement>(null);
+
+  // Load stamped provinces on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("passport_stamps");
+    if (saved) {
+      try {
+        setStampedProvinces(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse stamps", e);
+      }
+    } else {
+      setStampedProvinces([]);
+    }
+  }, []);
 
   // Extract unique provinces that actually have cultural data
   const availableProvinces = Array.from(new Set(cultures.map(c => c.province)));
@@ -23,75 +41,120 @@ export default function PetaPage() {
     if (query.length > 3) {
       const match = availableProvinces.find(p => p.toLowerCase().includes(query.toLowerCase()));
       if (match) {
-        setActiveProvince(match);
+        handleProvinceSelect(match);
       }
     }
   };
 
+  const handleProvinceSelect = (province: string) => {
+    setActiveProvince(province);
+    
+    // Smooth scroll down to the detailed cultural dashboard
+    setTimeout(() => {
+      dashboardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  };
+
+  const handleUnlockStamp = (province: string) => {
+    if (!stampedProvinces.includes(province)) {
+      const next = [...stampedProvinces, province];
+      setStampedProvinces(next);
+      localStorage.setItem("passport_stamps", JSON.stringify(next));
+      
+      // Trigger animation specifically for this newly visited province
+      setNewStampAnimProvince(province);
+      setTimeout(() => {
+        setNewStampAnimProvince(null);
+      }, 2000);
+    }
+  };
+
+  const handleResetPassport = () => {
+    if (confirm("Apakah Anda yakin ingin mereset seluruh stempel paspor Anda?")) {
+      setStampedProvinces([]);
+      localStorage.removeItem("passport_stamps");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white pt-32 pb-20 transition-colors duration-300">
+    <div className="min-h-screen bg-zinc-50 dark:bg-black text-black dark:text-white pt-28 pb-20 transition-colors duration-300">
       
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center mb-16">
-        <nav className="flex justify-center text-xs font-medium tracking-widest uppercase mb-6 text-black/50 dark:text-white/50">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center mb-10">
+        <nav className="flex justify-center text-xs font-semibold tracking-widest uppercase mb-4 text-black/40 dark:text-white/40">
           <Link href="/" className="hover:text-amber-500 transition-colors">Beranda</Link>
           <span className="mx-2">/</span>
           <span className="text-black dark:text-white">Peta Nusantara</span>
         </nav>
-        <span className="text-gold tracking-[0.2em] uppercase text-xs mb-4 font-medium block">
-          Eksplorasi Wilayah
+        <span className="text-amber-500 tracking-[0.25em] uppercase text-xs mb-3 font-bold block">
+          Eksplorasi Kebudayaan
         </span>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight">
-          Satu Peta, <br className="hidden md:block" /> Ribuan Cerita
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-5 leading-tight font-outfit">
+          Peta Interaktif Budaya
         </h1>
-        <p className="text-black/60 dark:text-white/60 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-          Klik tiap provinsi untuk menemukan kekayaan budaya khas daerahnya.
+        <p className="text-black/60 dark:text-white/60 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+          Klik kepulauan utama atau cari provinsi Anda untuk mendalami warisan leluhur, seni tradisional, dan musik nusantara.
         </p>
       </div>
 
-      {/* Main Interactive Map Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-24">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      {/* Main Map Area (Hero Grid) */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
+        <div className="flex flex-col gap-6">
           
-          {/* Left Column: Map (~60-65%) */}
-          <div className="w-full lg:w-7/12 xl:w-2/3 flex flex-col">
+          {/* Map Top Header & Search Control */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-zinc-950 p-4 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm">
+            <div className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+              Menampilkan data budaya terlengkap di 34 Provinsi
+            </div>
             
-            {/* Search Bar above Map */}
-            <div className="mb-6 relative w-full md:w-72">
+            {/* Search Bar */}
+            <div className="relative w-full sm:w-80">
               <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 dark:text-white/40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input 
                 type="text" 
-                placeholder="Cari provinsi..." 
+                placeholder="Cari provinsi (misal: Jawa Barat)..." 
                 value={searchQuery}
                 onChange={handleSearch}
-                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-full pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-gold transition-all"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-full pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all font-medium"
               />
-            </div>
-
-            {/* Map Container */}
-            <div className="flex-1 min-h-[400px] relative">
-              <IndonesiaMap 
-                activeProvince={activeProvince} 
-                onProvinceClick={setActiveProvince}
-                onHover={setHoveredProvince}
-              />
-              
-              {/* Custom Tooltip that follows hovered province logically */}
-              {hoveredProvince && !activeProvince && (
-                <div className="absolute top-4 right-4 pointer-events-none bg-black/80 dark:bg-white/80 text-white dark:text-black px-4 py-2 rounded-lg text-sm font-bold shadow-xl backdrop-blur-md">
-                  {hoveredProvince}
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Right Column: Info Panel (~35-40%) */}
-          <div className="w-full lg:w-5/12 xl:w-1/3">
-            <div className="sticky top-24">
-              <ProvinceSidePanel activeProvince={activeProvince} />
-            </div>
+          {/* Large Map Container */}
+          <div className="w-full relative rounded-3xl overflow-hidden shadow-lg bg-white dark:bg-zinc-950">
+            <IndonesiaMap 
+              activeProvince={activeProvince} 
+              stampedProvinces={stampedProvinces}
+              onProvinceClick={handleProvinceSelect}
+              onHover={setHoveredProvince}
+            />
           </div>
 
+        </div>
+      </div>
+
+      {/* Detailed Immersive Dashboard Section Below Map */}
+      <div 
+        ref={dashboardRef}
+        className="max-w-7xl mx-auto px-6 md:px-12 mb-20 scroll-mt-28"
+      >
+        <div className="text-center sm:text-left mb-8">
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-1">
+            Dasbor Penjelajah
+          </span>
+          <h2 className="text-2xl md:text-3xl font-medium font-outfit">
+            Eksplorasi Wilayah Terpilih
+          </h2>
+        </div>
+
+        <div className="w-full">
+          <ProvinceSidePanel 
+            activeProvince={activeProvince} 
+            stampedProvinces={stampedProvinces}
+            showStampAnim={newStampAnimProvince === activeProvince}
+            onUnlockStamp={handleUnlockStamp}
+            onResetPassport={handleResetPassport}
+          />
         </div>
       </div>
 

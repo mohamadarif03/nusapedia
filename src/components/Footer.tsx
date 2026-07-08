@@ -21,9 +21,11 @@ export default function Footer() {
           
           {/* Col 1: Brand */}
           <div className="w-full lg:w-2/5 pr-0 lg:pr-12">
-            <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-medium tracking-widest text-black dark:text-white transition-colors duration-300">
-                CULTURE<span className="font-light text-black/50 dark:text-white/50">VERSE</span>
+            <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
+              <img src="/logo.png" alt="NUSAPEDIA Logo" className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110" />
+              <span className="text-2xl font-medium tracking-widest transition-colors duration-300">
+                <span className="text-[#4E3325] dark:text-[#f4eae4]">NUSA</span>
+                <span className="font-light text-[#C99A2E]">PEDIA</span>
               </span>
             </Link>
             <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed mb-6 max-w-sm transition-colors duration-300">
@@ -48,10 +50,10 @@ export default function Footer() {
             <h4 className="text-black dark:text-white font-medium mb-6 uppercase tracking-widest text-xs transition-colors duration-300">Jelajahi</h4>
             <ul className="space-y-4">
               <li><Link href="/" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Beranda</Link></li>
-              <li><Link href="/#jelajahi" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Jelajahi Budaya</Link></li>
-              <li><Link href="/#peta" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Peta Nusantara</Link></li>
-              <li><Link href="/#mainkan" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Mainkan</Link></li>
-              <li><Link href="/#tanya-ai" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Tanya AI</Link></li>
+              <li><Link href="/jelajahi" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Jelajahi Budaya</Link></li>
+              <li><Link href="/peta" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Peta Nusantara</Link></li>
+              <li><Link href="/mainkan" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Mainkan</Link></li>
+              <li><Link href="/tanya-ai" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Tanya AI</Link></li>
             </ul>
           </div>
 
@@ -59,9 +61,9 @@ export default function Footer() {
           <div className="w-full sm:w-1/2 lg:w-1/5">
             <h4 className="text-black dark:text-white font-medium mb-6 uppercase tracking-widest text-xs transition-colors duration-300">Tentang</h4>
             <ul className="space-y-4">
-              <li><Link href="#tentang" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Tentang Proyek</Link></li>
-              <li><Link href="#sumber" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Sumber Data</Link></li>
-              <li><Link href="#kontak" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Kontak</Link></li>
+              <li><Link href="/#pelestarian" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Tentang Proyek</Link></li>
+              <li><a href="https://ich.unesco.org" target="_blank" rel="noopener noreferrer" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Sumber Data</a></li>
+              <li><a href="mailto:support@cultureverse.id" className="text-black/60 dark:text-white/60 hover:text-gold text-sm transition-colors duration-300">Kontak</a></li>
             </ul>
           </div>
 
@@ -84,7 +86,7 @@ export default function Footer() {
         {/* Bottom Strip */}
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/10 dark:border-white/10 gap-4 transition-colors duration-300">
           <p className="text-black/40 dark:text-white/40 text-xs text-center md:text-left transition-colors duration-300">
-            &copy; 2026 Culture Verse. Dibuat untuk Kompetisi Web Inovasi Digital.
+            &copy; 2026 NUSAPEDIA. Dibuat untuk Kompetisi Web Inovasi Digital.
           </p>
           <div className="flex items-center gap-6">
             <Link href="#privacy" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs transition-colors duration-300">Privacy Policy</Link>

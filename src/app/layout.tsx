@@ -11,7 +11,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Culture Verse | Warisan Budaya Nusantara",
+  title: "NUSAPEDIA | Warisan Budaya Nusantara",
   description: "Jelajahi Warisan Budaya Nusantara melalui pengalaman visual yang interaktif.",
 };
 
