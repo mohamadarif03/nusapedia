@@ -42,7 +42,7 @@ const getAIResponse = (query: string): string => {
 };
 
 // Mock recognition models for batik recognition
-interface BatikAnalysisResult {
+interface CultureAnalysisResult {
   motifName: string;
   philosophy: string;
   visualTraits: string[];
@@ -50,7 +50,7 @@ interface BatikAnalysisResult {
   slug: string;
 }
 
-const MOCK_ANALYSES: Record<string, BatikAnalysisResult> = {
+const MOCK_ANALYSES: Record<string, CultureAnalysisResult> = {
   kawung: {
     motifName: "Motif Kawung",
     philosophy: "Buah aren menyilang melambangkan kesucian hati, keadilan, serta keseimbangan jagat raya.",
@@ -151,7 +151,7 @@ const parseMarkdown = (text: string) => {
 };
 
 export default function TanyaAIPage() {
-  const [activeTab, setActiveTab] = useState<"chatbot" | "batik">("chatbot");
+  const [activeTab, setActiveTab] = useState<"chatbot" | "scan">| "scan">|useState<"chatbot" | "scan">| "scan">("chatbot");
   
   // Chatbot Sessions State
   const [sessions, setSessions] = useState<ChatSession[]>([]);
@@ -164,7 +164,7 @@ export default function TanyaAIPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<BatikAnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<CultureAnalysisResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Initialize and load sessions from LocalStorage
@@ -370,7 +370,7 @@ export default function TanyaAIPage() {
     }
   };
 
-  const runBatikAnalysis = () => {
+  const runImageAnalysis = () => {
     if (!selectedFile) return;
 
     setIsAnalyzing(true);
@@ -396,7 +396,7 @@ export default function TanyaAIPage() {
         } else {
           try {
             const cleanedText = data.text.trim();
-            const result: BatikAnalysisResult = JSON.parse(cleanedText);
+            const result: CultureAnalysisResult = JSON.parse(cleanedText);
             setAnalysisResult(result);
           } catch (jsonErr) {
             console.error("Failed to parse JSON response from Gemini:", data.text);
@@ -453,15 +453,15 @@ export default function TanyaAIPage() {
             Tanya Asisten
           </button>
           <button
-            onClick={() => setActiveTab("batik")}
+            onClick={() => setActiveTab("scan")}
             className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-              activeTab === "batik" 
+              activeTab === "scan" 
                 ? "bg-gold text-black shadow-md shadow-gold/20" 
                 : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
             }`}
           >
             <Search size={14} />
-            Kenali Motif Batik
+            Pindai Gambar Budaya
           </button>
         </div>
       </div>
@@ -639,7 +639,7 @@ export default function TanyaAIPage() {
         )}
 
         {/* Tab 2: Batik Analyzer */}
-        {activeTab === "batik" && (
+        {activeTab === "scan" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
             {/* Left Column: Image Upload Area */}
@@ -682,7 +682,7 @@ export default function TanyaAIPage() {
                   ) : (
                     <div className="flex flex-col items-center pointer-events-none">
                       <UploadCloud size={36} className="text-black/40 dark:text-white/40 mb-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider mb-2">Unggah Foto Kain Batik</span>
+                      <span className="text-xs font-bold uppercase tracking-wider mb-2">Unggah Foto Objek Budaya</span>
                       <span className="text-[10px] text-black/50 dark:text-white/50 mb-6">Format JPG, PNG, maksimal 5MB</span>
                       <button 
                         onClick={triggerFileSelect}
@@ -696,7 +696,7 @@ export default function TanyaAIPage() {
 
                 {/* Submit Trigger Analysis button */}
                 <button
-                  onClick={runBatikAnalysis}
+                  onClick={runImageAnalysis}
                   disabled={!selectedImage || isAnalyzing}
                   className="w-full mt-6 py-3.5 bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow disabled:opacity-30 disabled:pointer-events-none hover:bg-gold dark:hover:bg-gold hover:text-black dark:hover:text-black"
                 >
@@ -743,7 +743,7 @@ export default function TanyaAIPage() {
 
                     {/* Motif philosophy */}
                     <div className="border-t border-black/10 dark:border-white/10 pt-4">
-                      <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block mb-1">Filosofi Batik</span>
+                      <span className="text-[10px] uppercase font-bold text-black/50 dark:text-white/50 block mb-1">Filosofi / Penjelasan</span>
                       <p className="text-xs leading-relaxed italic text-black/60 dark:text-white/60">
                         &ldquo;{analysisResult.philosophy}&rdquo;
                       </p>
@@ -772,7 +772,7 @@ export default function TanyaAIPage() {
                       Hasil Analisis AI
                     </h3>
                     <p className="text-xs text-black/40 dark:text-white/40 leading-relaxed">
-                      Unggah foto motif batik di panel kiri lalu tekan tombol Analisis untuk mengidentifikasi corak, arti filosofis, dan asal daerahnya di sini.
+                      Unggah foto objek budaya di panel kiri lalu tekan tombol Analisis untuk mengidentifikasinya.
                     </p>
                   </div>
                 )}
@@ -793,7 +793,7 @@ export default function TanyaAIPage() {
               <Camera size={24} className="text-gold shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold">Pencahayaan Cukup</h5>
-                <p className="text-[10px] text-black/50 dark:text-white/50 mt-1 leading-relaxed">Foto motif batik dari jarak dekat dengan pencahayaan yang merata agar garis terdeteksi jelas.</p>
+                <p className="text-[10px] text-black/50 dark:text-white/50 mt-1 leading-relaxed">Pastikan objek terlihat jelas agar kecerdasan buatan dapat mengidentifikasinya dengan baik.</p>
               </div>
             </div>
             <div className="flex gap-4 items-start">

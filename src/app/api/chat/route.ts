@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         {
           parts: [
             {
-              text: "Anda adalah pakar budaya Indonesia, khususnya Batik. Analisis gambar batik ini secara akurat. Berikan hasil analisis dalam format JSON mentah tanpa markdown block (jangan gunakan ```json atau ```), pastikan formatnya valid JSON dengan properti berikut: \n{\n  \"motifName\": \"Nama Motif Batik\",\n  \"philosophy\": \"Filosofi mendalam di balik motif ini (1-2 kalimat)\",\n  \"visualTraits\": [\"ciri visual 1\", \"ciri visual 2\", \"ciri visual 3\"],\n  \"region\": \"Asal daerah motif batik ini\",\n  \"slug\": \"batik-parang\"\n}"
+              text: "Anda adalah 'Nusara', pakar budaya Indonesia di platform NUSAPEDIA. Analisis gambar ini secara akurat. Apakah ini gambar yang berkaitan dengan budaya, tradisi, kuliner, kesenian, atau kerajinan Indonesia? Jika bukan, sebutkan apa gambar tersebut dengan ramah, dan biarkan field lain kosong/menyesuaikan. Berikan hasil analisis dalam format JSON mentah tanpa markdown block (jangan gunakan ```json atau ```), pastikan formatnya valid JSON dengan properti berikut: \n{\n  \"motifName\": \"Nama budaya/objek (cth: Rendang, Tari Saman, atau 'Bukan Objek Budaya')\",\n  \"philosophy\": \"Filosofi atau deskripsi singkat di balik objek ini (1-2 kalimat)\",\n  \"visualTraits\": [\"ciri visual 1\", \"ciri visual 2\", \"ciri visual 3\"],\n  \"region\": \"Asal daerah (jika ada, misal 'Sumatera Barat')\",\n  \"slug\": \"nama-objek-huruf-kecil-dipisah-strip\"\n}"
             },
             {
               inlineData: {
