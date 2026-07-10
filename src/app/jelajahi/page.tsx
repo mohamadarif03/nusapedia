@@ -17,8 +17,7 @@ export default function ExplorePage() {
 
   // Extract all unique provinces dynamically from cultures data that have local images
   const provinces = useMemo(() => {
-    const localCultures = cultures.filter((c) => c.image.startsWith("/culture/"));
-    const uniqueProvinces = Array.from(new Set(localCultures.map((c) => c.province)));
+    const uniqueProvinces = Array.from(new Set(cultures.map((c) => c.province)));
     return ["Semua Provinsi", ...uniqueProvinces.sort()];
   }, []);
 
@@ -29,9 +28,6 @@ export default function ExplorePage() {
 
   const filteredCultures = useMemo(() => {
     return cultures.filter((culture) => {
-      // Only include cultures with local images (starts with /culture/)
-      const hasLocalImage = culture.image.startsWith("/culture/");
-      if (!hasLocalImage) return false;
 
       const matchCategory = activeCategory === "Semua" || culture.category === activeCategory;
       const matchProvince = activeProvince === "Semua Provinsi" || culture.province === activeProvince;

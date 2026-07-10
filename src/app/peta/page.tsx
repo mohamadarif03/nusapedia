@@ -151,7 +151,7 @@ export default function PetaPage() {
           <ProvinceSidePanel 
             activeProvince={activeProvince} 
             stampedProvinces={stampedProvinces}
-            showStampAnim={newStampAnimProvince === activeProvince}
+            showStampAnim={activeProvince !== null && newStampAnimProvince === activeProvince}
             onUnlockStamp={handleUnlockStamp}
             onResetPassport={handleResetPassport}
           />

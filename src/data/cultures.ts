@@ -195,10 +195,7 @@ Memasang tiang penyangga utama (cempurit) serta gapit tangan yang terbuat dari t
   ...moreCultures2
 ];
 
-// Only export cultures that have local photos (path starts with "/culture/")
-export const cultures: Culture[] = rawCultures.filter((c) =>
-  c.image.startsWith("/culture/")
-);
+export const cultures: Culture[] = rawCultures;
 
 export interface UnescoItem {
   id: string;
