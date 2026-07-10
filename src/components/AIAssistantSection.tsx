@@ -46,7 +46,14 @@ export default function AIAssistantSection() {
   const currentChat = chats[currentIndex];
 
   return (
-    <section id="tanya-ai" className="relative z-20 bg-white dark:bg-black text-black dark:text-white py-24 md:py-32 overflow-hidden border-t border-black/5 dark:border-white/5 transition-colors duration-300">
+    <motion.section 
+      id="tanya-ai" 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8 }}
+      className="relative z-20 bg-white dark:bg-black text-black dark:text-white py-24 md:py-32 overflow-hidden border-t border-black/5 dark:border-white/5 transition-colors duration-300"
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col-reverse lg:flex-row items-center gap-16 lg:gap-24">
         
         {/* Left Column (50%) - Chat Mockup Visual */}
@@ -161,6 +168,6 @@ export default function AIAssistantSection() {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

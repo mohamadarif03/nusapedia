@@ -16,7 +16,14 @@ export default function MapPreviewSection() {
   ];
 
   return (
-    <section id="peta" className="relative z-20 bg-white dark:bg-black text-black dark:text-white py-24 md:py-32 overflow-hidden border-t border-black/5 dark:border-white/5 transition-colors duration-300">
+    <motion.section 
+      id="peta" 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8 }}
+      className="relative z-20 bg-white dark:bg-black text-black dark:text-white py-24 md:py-32 overflow-hidden border-t border-black/5 dark:border-white/5 transition-colors duration-300"
+    >
       {/* Subtle Background Glow */}
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
       
@@ -102,6 +109,6 @@ export default function MapPreviewSection() {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

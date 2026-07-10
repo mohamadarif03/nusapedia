@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "motion/react";
 
 export default function ExplorePreviewSection() {
   const cards = [
@@ -34,7 +35,13 @@ export default function ExplorePreviewSection() {
   ];
 
   return (
-    <section className="relative z-20 bg-[#fafafa] dark:bg-[#0a0a0a] border-t border-black/5 dark:border-white/5 py-24 md:py-32 transition-colors duration-300">
+    <motion.section 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8 }}
+      className="relative z-20 bg-[#fafafa] dark:bg-[#0a0a0a] border-t border-black/5 dark:border-white/5 py-24 md:py-32 transition-colors duration-300"
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Header Section */}
@@ -115,6 +122,6 @@ export default function ExplorePreviewSection() {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }
